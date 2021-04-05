@@ -29,8 +29,10 @@ module.exports = function(passport) {
 
                 //user exist in the db
                 if(user) {
+                    console.log("User exist");
                     cb(null, user);
                 } else {
+                    console.log("User doesn't exist");
                     user = await User.create(newUser);
                     cb(null, user);
                 }
