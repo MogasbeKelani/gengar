@@ -37,26 +37,6 @@ app.use(passport.session());
 
 app.use("/google", sso);
 
-//Use for passport as test route for now
-//Dont know where to redirect to in frontend
-//redirect here if sso was successful
-app.get('/', (req, res) => {
-    console.log(req.session);  // let you see the current session
-    console.log(req.user);    // let you see and get user information
-    res.send("Success");
-})
-
-//redirect here if sso fail
-//dont know where to redirect to in frontend
-app.get('/fail', (req, res) => {
-    res.send("Failure");
-})
-
-app.get('/loggedOut', (req, res) => {
-    res.send("You are log out");
-})
-
-
 app.use("/api/test", movieRouter);
 
 app.use("/api", utube);

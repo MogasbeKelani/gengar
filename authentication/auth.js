@@ -7,8 +7,7 @@ module.exports = {
         if(req.isAuthenticated()) {
             return next(); 
         } else {
-            /// dont know what the login page is
-            res.redirect('/fail') //for now it will go to /fail
+            res.redirect('http://localhost:3000/sign-in') //it will redirect the user to login page if they arent looking or not auth
         }
     })
 
