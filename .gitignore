@@ -104,4 +104,4 @@ dist
 .tern-port
 
 #config.yaml
-config
+config/ci.yaml
