@@ -1,4 +1,4 @@
-export interface youtubeSearchRequest {
+export interface searchRequest {
   resultsSize: number;
   query: String;
 }

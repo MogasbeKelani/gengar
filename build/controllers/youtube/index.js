@@ -22,13 +22,15 @@ const client = google.youtube({
  */
 const utubeSearch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        var numResults = req.resultsSize || 10;
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        var numResults = req.query.resultsSize || 3;
         const results = yield client.search.list({
             part: "snippet",
             type: "video",
             maxResults: numResults,
             order: "relevance",
-            q: req.query,
+            q: req.query.query,
         });
         res.status(200).json(results.data.items);
     }

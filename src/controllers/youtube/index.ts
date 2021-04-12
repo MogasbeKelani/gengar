@@ -12,13 +12,15 @@ const client = google.youtube({
  */
 const utubeSearch = async (req: any, res: any) => {
   try {
-    var numResults = req.resultsSize || 10;
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    var numResults = req.query.resultsSize || 3;
     const results = await client.search.list({
       part: "snippet",
       type: "video",
       maxResults: numResults,
       order: "relevance",
-      q: req.query,
+      q: req.query.query,
     });
     res.status(200).json(results.data.items);
   } catch {
