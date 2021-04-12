@@ -1,15 +1,15 @@
-// FRONT END LOOK HERE
-// const searchRequest = require("./../../models/youtube");
+// const searchRequest,searchResponse = require("./../../models/youtube");
 
 var { google } = require("googleapis");
 
 const client = google.youtube({
   version: "v3",
-  auth: config.utube.apikey,
+  auth: global.myvar.utube.apikey,
 });
 
 /**
  * @param searchRequest
+ * @return searchResponse
  */
 utubeSearch = async (req, res) => {
   try {

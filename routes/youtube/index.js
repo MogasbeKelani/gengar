@@ -6,6 +6,6 @@ const router = express.Router();
 
 youtube = router;
 
-youtube.get("/youtube/search", utube.utubeSearch);
+youtube.get("/search", utube.utubeSearch);
 
 module.exports = youtube;
