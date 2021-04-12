@@ -5,7 +5,11 @@
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.ts",
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "dev": "nodemon app.js",
+    "watch": "tsc -w",
     "start": "concurrently \"npm run dev\" \" cd ../gitgudcoding && npm run client\""
   },
   "keywords": [],

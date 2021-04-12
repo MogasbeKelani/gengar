@@ -1,22 +1,19 @@
 // const searchRequest,searchResponse = require("./../../models/leetcode");
-const { JSDOM } = require("jsdom");
-const { window } = new JSDOM("");
-const $ = require("jquery")(window);
 const fetch = require("node-fetch");
 
 /**
  * @return A
  */
-allQuestions = async (req, res) => {
+const allQuestions = async (req: any, res: any) => {
   try {
     const allProblems = await fetch("https://leetcode.com/api/problems/all/", {
       mode: "cors",
     })
-      .then(function (response) {
+      .then(function (response: any) {
         return response.json();
       })
-      .catch(function (error) {
-        log("Request failed", error);
+      .catch(function (error: any) {
+        console.log("Request failed", error);
       });
     res.status(200).json(allProblems);
   } catch {
@@ -24,7 +21,7 @@ allQuestions = async (req, res) => {
   }
 };
 
-singleQuestion = async (req, res) => {
+const singleQuestion = async (req: any, res: any) => {
   try {
     const allProblems = await fetch("https://leetcode.com/graphql", {
       headers: {
@@ -32,18 +29,16 @@ singleQuestion = async (req, res) => {
       },
       referrer: "https://leetcode.com/problems/bitwise-and-of-numbers-range/",
       body:
-        global.myvar.leetcode.query.P1 +
-        "happy-number" +
-        global.myvar.leetcode.query.P2,
+        configs.leetcode.query.P1 + "happy-number" + configs.leetcode.query.P2,
 
       method: "POST",
       mode: "cors",
     })
-      .then(function (response) {
+      .then(function (response: any) {
         return response.json();
       })
-      .catch(function (error) {
-        log("Request failed", error);
+      .catch(function (error: any) {
+        console.log("Request failed", error);
       });
     res.status(200).json(allProblems);
   } catch {
@@ -51,7 +46,4 @@ singleQuestion = async (req, res) => {
   }
 };
 
-module.exports = {
-  allQuestions,
-  singleQuestion,
-};
+export { allQuestions, singleQuestion };

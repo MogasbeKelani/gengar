@@ -1,17 +1,16 @@
 // const searchRequest,searchResponse = require("./../../models/youtube");
 
 var { google } = require("googleapis");
-
 const client = google.youtube({
   version: "v3",
-  auth: global.myvar.utube.apikey,
+  auth: configs.utube.apikey,
 });
 
 /**
  * @param searchRequest
  * @return searchResponse
  */
-utubeSearch = async (req, res) => {
+const utubeSearch = async (req: any, res: any) => {
   try {
     var numResults = req.resultsSize || 10;
     const results = await client.search.list({
@@ -27,6 +26,4 @@ utubeSearch = async (req, res) => {
   }
 };
 
-module.exports = {
-  utubeSearch,
-};
+export { utubeSearch };
