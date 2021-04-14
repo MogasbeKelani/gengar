@@ -6,8 +6,28 @@ const leetcode = require("../../controllers/leetcode");
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 
-const lc = router;
-lc.get("/questions/all", leetcode.allQuestions);
-lc.get("/questions/name", leetcode.singleQuestion);
+router.get("/questions/all", async (req: any, res: any) => {
+  try {
+    const allProblems = await leetcode.allQuestions();
+    res.send({
+      allProblems,
+    });
+  } catch (err) {
+    throw err;
+  }
+});
 
-module.exports = lc;
+router.get("/questions/:name", async (req: any, res: any) => {
+  try {
+    const allProblems = await leetcode.singleQuestion({
+      questionTitleSlug: req.params.name,
+    });
+    res.send({
+      allProblems,
+    });
+  } catch (err) {
+    throw err;
+  }
+});
+
+module.exports = router;

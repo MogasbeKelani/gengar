@@ -1,6 +1,6 @@
 // const searchRequest,searchResponse = require("./../../models/youtube");
 
-var { google } = require("googleapis");
+let { google } = require("googleapis");
 const client = google.youtube({
   version: "v3",
   auth: configs.utube.apikey,
@@ -14,7 +14,7 @@ const utubeSearch = async (req: any, res: any) => {
   try {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    var numResults = req.query.resultsSize || 3;
+    let numResults = req.query.resultsSize || 3;
     const results = await client.search.list({
       part: "snippet",
       type: "video",

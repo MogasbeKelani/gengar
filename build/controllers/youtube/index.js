@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.utubeSearch = void 0;
-var { google } = require("googleapis");
+let { google } = require("googleapis");
 const client = google.youtube({
     version: "v3",
     auth: configs.utube.apikey,
@@ -24,7 +24,7 @@ const utubeSearch = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        var numResults = req.query.resultsSize || 3;
+        let numResults = req.query.resultsSize || 3;
         const results = yield client.search.list({
             part: "snippet",
             type: "video",
