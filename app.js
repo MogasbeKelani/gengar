@@ -43,7 +43,11 @@ app.use(passport.session());
 
 const utube = require("./build/routes/youtube");
 const leetcode = require("./build/routes/leetcode");
+const users = require("./build/routes/users");
+const profile = require("./build/routes/profile");
 
 app.use("/google", sso);
 app.use("/api/youtube", utube);
 app.use("/api/leetcode", leetcode);
+app.use("/users", users);
+app.use("/profile", profile);
