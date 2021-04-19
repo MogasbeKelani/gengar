@@ -1,13 +1,24 @@
 // @ts-ignore // not typescript-ified yet
 const express = require("express");
 
-const utube = require("../../controllers/youtube");
+const youtube = require("../../controllers/youtube");
 
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 
-const youtube = router;
+router.get("/search", async (req: any, res: any) => {
+  try {
+    console.log(req.session, req.user);
+    const searchResults = await youtube.search({
+      resultsSize: req.query.resultsSize,
+      query: req.query.query,
+    });
+    res.send({
+      searchResults,
+    });
+  } catch (err) {
+    throw err;
+  }
+});
 
-youtube.get("/search", utube.utubeSearch);
-
-module.exports = youtube;
+module.exports = router;

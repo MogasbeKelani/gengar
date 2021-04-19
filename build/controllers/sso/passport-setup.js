@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const mongoose = require("mongoose");
+Object.defineProperty(exports, "__esModule", { value: true });
 const User = require("../../models/general/user-model");
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
 const GOOGLE_CLIENT_SECRET = configs.googleSSO.sercret;
@@ -20,8 +20,6 @@ module.exports = function (passport) {
         callbackURL: "http://localhost:5000/google/auth/callback",
     }, function (accessToken, refreshToken, profile, cb) {
         return __awaiter(this, void 0, void 0, function* () {
-            // cb is callback
-            console.log(profile);
             const newUser = {
                 google_id: profile.id,
                 first_name: profile.name.givenName,
@@ -30,7 +28,6 @@ module.exports = function (passport) {
             };
             try {
                 let user = yield User.findOne({ google_id: profile.id });
-                // user exist in the db
                 if (user) {
                     console.log("User exist");
                     cb(null, user);

@@ -1,11 +1,12 @@
-const mongoose = require("mongoose");
-const User = require("../../models/general/user-model");
+import mongoose = require("mongoose");
+import { UserModelFunctions } from "../../models/general/user-model-functions";
+const User: UserModelFunctions = require("../../models/general/user-model");
 
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
 const GOOGLE_CLIENT_SECRET = configs.googleSSO.sercret;
 let GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-module.exports = function(passport) {
+module.exports = function (passport: any) {
   passport.use(
     new GoogleStrategy(
       {
@@ -13,11 +14,12 @@ module.exports = function(passport) {
         clientSecret: GOOGLE_CLIENT_SECRET,
         callbackURL: "http://localhost:5000/google/auth/callback",
       },
-      async function(accessToken, refreshToken, profile, cb) {
-        // cb is callback
-
-        console.log(profile);
-
+      async function (
+        accessToken: any,
+        refreshToken: any,
+        profile: any,
+        cb: any
+      ) {
         const newUser = {
           google_id: profile.id,
           first_name: profile.name.givenName,
@@ -27,8 +29,6 @@ module.exports = function(passport) {
 
         try {
           let user = await User.findOne({ google_id: profile.id });
-
-          // user exist in the db
           if (user) {
             console.log("User exist");
             cb(null, user);
@@ -40,16 +40,16 @@ module.exports = function(passport) {
         } catch (err) {
           console.error(err);
         }
-      },
-    ),
+      }
+    )
   );
 
-  passport.serializeUser(function(user, done) {
+  passport.serializeUser(function (user: any, done: any) {
     done(null, user.id);
   });
 
-  passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
+  passport.deserializeUser(function (id: any, done: any) {
+    User.findById(id, function (err: any, user: any) {
       done(err, user);
     });
   });

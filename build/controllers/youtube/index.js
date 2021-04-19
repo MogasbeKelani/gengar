@@ -1,5 +1,4 @@
 "use strict";
-// const searchRequest,searchResponse = require("./../../models/youtube");
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.utubeSearch = void 0;
-let { google } = require("googleapis");
+exports.search = void 0;
+const { google } = require("googleapis");
 const client = google.youtube({
     version: "v3",
     auth: configs.utube.apikey,
@@ -20,22 +19,22 @@ const client = google.youtube({
  * @param searchRequest
  * @return searchResponse
  */
-const utubeSearch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        let numResults = req.query.resultsSize || 3;
-        const results = yield client.search.list({
-            part: "snippet",
-            type: "video",
-            maxResults: numResults,
-            order: "relevance",
-            q: req.query.query,
-        });
-        res.status(200).json(results.data.items);
-    }
-    catch (_a) {
-        res.status(404).json({ message: "Something went wrong" });
-    }
-});
-exports.utubeSearch = utubeSearch;
+function search(options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const numResults = options.resultsSize || 3;
+            const results = yield client.search.list({
+                part: "snippet",
+                type: "video",
+                maxResults: numResults,
+                order: "relevance",
+                q: options.query,
+            });
+            return results.data.items;
+        }
+        catch (err) {
+            throw err;
+        }
+    });
+}
+exports.search = search;
