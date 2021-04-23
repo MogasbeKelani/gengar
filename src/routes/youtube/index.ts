@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get("/search", async (req: any, res: any) => {
   try {
-    console.log(req.session, req.user);
     const searchResults = await youtube.search({
       resultsSize: req.query.resultsSize,
       query: req.query.query,

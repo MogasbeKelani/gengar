@@ -30,4 +30,17 @@ router.get("/questions/:name", async (req: any, res: any) => {
   }
 });
 
+router.get("/questions/:topics", async (req: any, res: any) => {
+  try {
+    const allProblems = await leetcode.singleQuestion({
+      questionTitleSlug: req.params.name,
+    });
+    res.send({
+      allProblems,
+    });
+  } catch (err) {
+    throw err;
+  }
+});
+
 module.exports = router;

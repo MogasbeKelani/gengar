@@ -29,7 +29,7 @@ module.exports = function (passport) {
             try {
                 let user = yield User.findOne({ google_id: profile.id });
                 if (user) {
-                    console.log("User exist");
+                    console.log("User exist:", user);
                     cb(null, user);
                 }
                 else {
