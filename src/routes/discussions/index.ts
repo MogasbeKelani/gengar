@@ -1,7 +1,6 @@
 // @ts-ignore // not typescript-ified yet
 const express = require("express");
 
-import { reseller } from "googleapis/build/src/apis/reseller";
 import {
   createDiscussion,
   getDiscussions,
