@@ -16,6 +16,9 @@ const index_1 = require("../../controllers/discussions/index");
 const router = express.Router();
 const bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
+/**
+ * @returns All Discussions
+ */
 router.get("/all", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const forum = yield index_1.getDiscussions();
@@ -25,6 +28,9 @@ router.get("/all", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
         throw err;
     }
 }));
+/**
+ * @param _id for a discussion
+ */
 router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
@@ -38,6 +44,10 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
         throw err;
     }
 }));
+/**
+ * @param topic for a discussion
+ * @returns list of discussions with that topic
+ */
 router.get("/topic/:topic", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.topic) {
@@ -51,6 +61,10 @@ router.get("/topic/:topic", jsonParser, (req, res) => __awaiter(void 0, void 0, 
         throw err;
     }
 }));
+/**
+ * @param req.body where body has atleast a title and a description
+ * @requires User to be logged in. Front end does not pass user must be in session
+ */
 router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.body.title || !req.body.description) {
@@ -70,6 +84,10 @@ router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 
         throw err;
     }
 }));
+/**
+ * @param _id of the discussion you want to patch
+ * @returns updated discussion
+ */
 router.patch("/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.body._id) {
@@ -83,6 +101,10 @@ router.patch("/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void
         throw err;
     }
 }));
+/**
+ * @param _id of the discussion you want to delete
+ * @returns success boolean
+ */
 router.delete("/delete/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {

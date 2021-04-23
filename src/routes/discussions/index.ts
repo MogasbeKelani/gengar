@@ -15,6 +15,9 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 
+/**
+ * @returns All Discussions
+ */
 router.get("/all", jsonParser, async (req: any, res: any) => {
   try {
     const forum = await getDiscussions();
@@ -24,7 +27,9 @@ router.get("/all", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
-
+/**
+ * @param _id for a discussion
+ */
 router.get("/:id", jsonParser, async (req: any, res: any) => {
   try {
     if (!req.params.id) {
@@ -38,6 +43,10 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
+/**
+ * @param topic for a discussion
+ * @returns list of discussions with that topic
+ */
 router.get("/topic/:topic", jsonParser, async (req: any, res: any) => {
   try {
     if (!req.params.topic) {
@@ -51,6 +60,10 @@ router.get("/topic/:topic", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
+/**
+ * @param req.body where body has atleast a title and a description
+ * @requires User to be logged in. Front end does not pass user must be in session
+ */
 
 router.post("/create", jsonParser, async (req: any, res: any) => {
   try {
@@ -73,6 +86,10 @@ router.post("/create", jsonParser, async (req: any, res: any) => {
   }
 });
 
+/**
+ * @param _id of the discussion you want to patch
+ * @returns updated discussion
+ */
 router.patch("/update", jsonParser, async (req: any, res: any) => {
   try {
     if (!req.body._id) {
@@ -85,7 +102,10 @@ router.patch("/update", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
-
+/**
+ * @param _id of the discussion you want to delete
+ * @returns success boolean
+ */
 router.delete("/delete/:id", jsonParser, async (req: any, res: any) => {
   try {
     if (!req.params.id) {
