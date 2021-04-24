@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.get("/signedin", (req: any, res: any) => {
   try {
-    let on = false;
-    if (req.isAuthenticated()) {
+    let on = req.isAuthenticated();
+    /*if (req.isAuthenticated()) {
       on = true;
-    }
+    }*/
     res.send({ on });
   } catch (err) {
     throw err;
