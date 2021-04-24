@@ -5,10 +5,13 @@ const db = require("./db");
 const fs = require("fs");
 const yaml = require("js-yaml");
 const apiPort = 5000;
-
-app.listen(apiPort, function () {
-  return console.log("Server running on port " + apiPort);
-});
+const bodyParser = require("body-parser");
+// create application/json parser
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 
 // Sets up the config YAML
 configs = yaml.load(fs.readFileSync("./config/ci.yaml", "utf8"));
@@ -44,8 +47,14 @@ app.use(passport.session());
 const utube = require("./build/routes/youtube");
 const leetcode = require("./build/routes/leetcode");
 const isAuth = require("./build/routes/check_so");
+const discussion = require("./build/routes/discussions");
 
 app.use("/google", sso);
 app.use("/api/youtube", utube);
 app.use("/api/leetcode", leetcode);
 app.use("/check_so", isAuth);
+app.use("/api/discussion", discussion);
+
+app.listen(apiPort, function () {
+  return console.log("Server running on port " + apiPort);
+});

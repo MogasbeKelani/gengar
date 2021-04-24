@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^14.14.37",
+    "kill-port": "^1.6.1",
     "nodemon": "^2.0.7",
     "ts-node": "^9.1.1",
     "tslint": "^5.12.1",

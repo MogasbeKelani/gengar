@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-import { UserModelFunctions } from "../../models/general/user-model-functions";
+import { UserModelFunctions } from "../../models/general/models/user-model-functions";
 const User: UserModelFunctions = require("../../models/general/user-model");
 
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
@@ -30,7 +30,7 @@ module.exports = function (passport: any) {
         try {
           let user = await User.findOne({ google_id: profile.id });
           if (user) {
-            console.log("User exist");
+            console.log("User exist:", user);
             cb(null, user);
           } else {
             console.log("User doesn't exist");
