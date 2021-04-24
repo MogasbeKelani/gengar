@@ -15,7 +15,6 @@ const youtube = require("../../controllers/youtube");
 const router = express.Router();
 router.get("/search", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.session, req.user);
         const searchResults = yield youtube.search({
             resultsSize: req.query.resultsSize,
             query: req.query.query,
