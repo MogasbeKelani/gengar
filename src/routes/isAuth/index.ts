@@ -1,18 +1,13 @@
-import { isRegExp } from "node:util";
-
 // @ts-ignore // not typescript-ified yet
 const express = require("express");
 
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 
-router.get("/signedin", (req: any, res: any) => {
+router.get("/check", (req: any, res: any) => {
   try {
-    let on = req.isAuthenticated();
-    /*if (req.isAuthenticated()) {
-      on = true;
-    }*/
-    res.send({ on });
+    var authenticated = req.isAuthenticated();
+    res.send({ authenticated });
   } catch (err) {
     throw err;
   }
