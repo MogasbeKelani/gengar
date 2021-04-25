@@ -26,10 +26,10 @@ function allQuestions() {
                 .catch(function (error) {
                 console.log("Request failed", error);
             });
-            var problemCrunch = allProblems["stat_status_pairs"].map(function (x) {
+            const problemCrunch = allProblems.stat_status_pairs.map(function (x) {
                 return {
-                    title: x.stat["question__title"],
-                    questionTitleSlug: x.stat["question__title_slug"],
+                    title: x.stat.question__title,
+                    questionTitleSlug: x.stat.question__title_slug,
                     difficulty: x.difficulty.level,
                 };
             });
@@ -64,7 +64,7 @@ function singleQuestion(title) {
                 .catch(function (error) {
                 console.log("Request failed", error);
             });
-            var singleProblemCrunch = {
+            const singleProblemCrunch = {
                 title: singleProblem.data.question.title,
                 questionTitleSlug: singleProblem.data.question.titleSlug,
                 content: singleProblem.data.question.content,

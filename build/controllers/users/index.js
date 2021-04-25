@@ -1,18 +1,79 @@
 "use strict";
-const Users = require("../../models/general/user-model");
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteUser = exports.updateUser = exports.getUserById = void 0;
+const userSchema = require("../../models/general/user-model");
 
-/**
- * @return List of users & their data
- */
-const userList = async (req, res) => {
-    await Users.find({}, (err, users) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
+function getUserById(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            var result = yield userSchema.findOne({ _id: id }, (err, users) => {
+                if (err) {
+                    return { success: false, error: err };
+                }
+                if (!users) {
+                    return { success: false, error: `User not found` };
+                }
+                return { success: true, data: users };
+            });
+            return result;
         }
-        return res.status(200).json({ success: true, data: users })
-    }).catch(err => console.log(err))
+        catch (err) {
+            throw err;
+        }
+    });
 }
+exports.getUserById = getUserById;
 
-exports.userList = userList;
+function updateUser(patch) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const result = yield userSchema.findOneAndUpdate({ _id: patch._id }, {
+                $set: {
+                    google_id: patch.google_id,
+                    first_name: patch.first_name,
+                    last_name: patch.last_name,
+                    image: patch.image,
+                    threadCreated: patch.threadCreated,
+                    postMade: patch.postMade,
+                },
+            }, { new: true });
+            return result;
+        }
+        catch (err) {
+            throw err;
+        }
+    });
+}
+exports.updateUser = updateUser;
 
-
+function deleteUser(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            var result = yield userSchema
+                .findByIdAndRemove(id)
+                .then((response) => {
+                return response;
+            })
+                .catch((err) => {
+                return err;
+            });
+            if (!result) {
+                return { success: false };
+            }
+            return { success: true };
+        }
+        catch (err) {
+            throw err;
+        }
+    });
+}
+exports.deleteUser = deleteUser;
