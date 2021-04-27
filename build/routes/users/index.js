@@ -16,7 +16,6 @@ const index_1 = require("../../controllers/users/index");
 const router = express.Router();
 const bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
-
 /**
  * @param _id for a user
  */
@@ -33,7 +32,6 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
         throw err;
     }
 }));
-
 /**
  * @param _id of the user you want to patch
  * @returns updated user
@@ -51,7 +49,6 @@ router.patch("/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void
         throw err;
     }
 }));
-
 /**
  * @param _id of the user you want to delete
  * @returns success boolean

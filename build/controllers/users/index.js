@@ -11,18 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.getUserById = void 0;
 const userSchema = require("../../models/general/user-model");
-
 function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield userSchema.findOne({ _id: id }, (err, users) => {
+            var result = yield userSchema.findOne({ _id: id }, (err, userInfo) => {
                 if (err) {
                     return { success: false, error: err };
                 }
-                if (!users) {
+                if (!userInfo) {
                     return { success: false, error: `User not found` };
                 }
-                return { success: true, data: users };
+                return { success: true, data: userInfo };
             });
             return result;
         }
@@ -32,7 +31,6 @@ function getUserById(id) {
     });
 }
 exports.getUserById = getUserById;
-
 function updateUser(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -54,7 +52,6 @@ function updateUser(patch) {
     });
 }
 exports.updateUser = updateUser;
-
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
