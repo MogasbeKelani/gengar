@@ -62,6 +62,23 @@ router.get("/topic/:topic", jsonParser, (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 /**
+ * @param topic for a discussion
+ * @returns list of discussions with that topic
+ */
+router.get("/title/:title", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.params.title) {
+            res.status(400).json({ message: "Missing Params" });
+            return;
+        }
+        const forum = yield index_1.getDiscussionByName(req.params.title);
+        res.send(forum);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
+/**
  * @param req.body where body has atleast a title and a description
  * @requires User to be logged in. Front end does not pass user must be in session
  */
@@ -71,12 +88,13 @@ router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 
             res.status(400).json({ message: "Missing Params" });
             return;
         }
+        console.log(req.user);
         if (!req.user || !req.user._id) {
             res.status(400).json({ message: "User has not signed In" });
             return;
         }
         var discussionFormatted = req.body;
-        discussionFormatted.creator = req.user._id;
+        discussionFormatted.creator = req.user.first_name + req.user.last_name;
         const forum = yield index_1.createDiscussion(req.body);
         res.send(forum);
     }
