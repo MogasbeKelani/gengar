@@ -62,8 +62,8 @@ router.get("/topic/:topic", jsonParser, (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 /**
- * @param topic for a discussion
- * @returns list of discussions with that topic
+ * @param title for a discussion
+ * @returns list of discussions with that title pr contains that title
  */
 router.get("/title/:title", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
