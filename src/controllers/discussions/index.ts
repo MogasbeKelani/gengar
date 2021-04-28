@@ -84,6 +84,25 @@ export async function getDiscussionByTopic(
     throw err;
   }
 }
+export async function getDiscussionByName(
+  name: String
+): Promise<discussion | any> {
+  try {
+    var result = await discussionSchema.find(
+      { title: { $regex: ".*" + name + ".*" } },
+      (err: any, forums: discussion) => {
+        if (err) {
+          return { success: false, error: err };
+        }
+
+        return { success: true, data: forums };
+      }
+    );
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
 export async function updateDiscussion(
   patch: discussion
 ): Promise<discussion | any> {

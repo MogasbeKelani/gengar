@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteDiscussion = exports.updateDiscussion = exports.getDiscussionByTopic = exports.getDiscussionById = exports.getDiscussions = exports.createDiscussion = void 0;
+exports.deleteDiscussion = exports.updateDiscussion = exports.getDiscussionByName = exports.getDiscussionByTopic = exports.getDiscussionById = exports.getDiscussions = exports.createDiscussion = void 0;
 const discussionSchema = require("../../models/general/schemas/forum-model");
 function createDiscussion(forum) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -89,6 +89,23 @@ function getDiscussionByTopic(topic) {
     });
 }
 exports.getDiscussionByTopic = getDiscussionByTopic;
+function getDiscussionByName(name) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            var result = yield discussionSchema.find({ title: { $regex: ".*" + name + ".*" } }, (err, forums) => {
+                if (err) {
+                    return { success: false, error: err };
+                }
+                return { success: true, data: forums };
+            });
+            return result;
+        }
+        catch (err) {
+            throw err;
+        }
+    });
+}
+exports.getDiscussionByName = getDiscussionByName;
 function updateDiscussion(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
