@@ -62,8 +62,8 @@ router.get("/topic/:topic", jsonParser, async (req: any, res: any) => {
   }
 });
 /**
- * @param topic for a discussion
- * @returns list of discussions with that topic
+ * @param title for a discussion
+ * @returns list of discussions with that title pr contains that title
  */
 router.get("/title/:title", jsonParser, async (req: any, res: any) => {
   try {
