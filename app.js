@@ -54,6 +54,7 @@ app.use("/api/youtube", utube);
 app.use("/api/leetcode", leetcode);
 app.use("/api/auth", isAuth);
 app.use("/api/discussion", discussion);
+//app.use("/api/threads", discussion);
 
 app.listen(apiPort, function () {
   return console.log("Server running on port " + apiPort);
