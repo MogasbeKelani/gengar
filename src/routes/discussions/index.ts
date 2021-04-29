@@ -8,6 +8,7 @@ import {
   getDiscussionByTopic,
   deleteDiscussion,
   updateDiscussion,
+  getDiscussionByName,
 } from "../../controllers/discussions/index";
 
 // @ts-ignore // not typescript-ified yet
@@ -61,6 +62,23 @@ router.get("/topic/:topic", jsonParser, async (req: any, res: any) => {
   }
 });
 /**
+ * @param title for a discussion
+ * @returns list of discussions with that title pr contains that title
+ */
+router.get("/title/:title", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.params.title) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const forum = await getDiscussionByName(req.params.title);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+/**
  * @param req.body where body has atleast a title and a description
  * @requires User to be logged in. Front end does not pass user must be in session
  */
@@ -71,12 +89,13 @@ router.post("/create", jsonParser, async (req: any, res: any) => {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
+    console.log(req.user);
     if (!req.user || !req.user._id) {
       res.status(400).json({ message: "User has not signed In" });
       return;
     }
     var discussionFormatted = req.body;
-    discussionFormatted.creator = req.user._id;
+    discussionFormatted.creator = req.user.first_name + req.user.last_name;
 
     const forum = await createDiscussion(req.body);
 

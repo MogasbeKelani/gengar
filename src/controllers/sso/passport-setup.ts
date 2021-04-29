@@ -3,7 +3,7 @@ import { UserModelFunctions } from "../../models/general/models/user-model-funct
 const User: UserModelFunctions = require("../../models/general/user-model");
 
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
-const GOOGLE_CLIENT_SECRET = configs.googleSSO.sercret;
+const GOOGLE_CLIENT_SECRET = configs.googleSSO.secret;
 let GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 module.exports = function (passport: any) {
