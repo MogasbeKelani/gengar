@@ -17,7 +17,6 @@ module.exports = function (passport: any) {
       async function (accessToken, refreshToken, profile, cb) {
         //cb is callback
 
-        console.log(profile);
 
         const newUser = {
           google_id: profile.id,
@@ -28,13 +27,10 @@ module.exports = function (passport: any) {
 
         try {
           let user = await User.findOne({ google_id: profile.id });
-          console.log(user);
           //user exist in the db
           if (user) {
-            console.log("User exist");
             cb(null, user);
           } else {
-            console.log("User doesn't exist");
             user = await User.create(newUser);
             cb(null, user);
           }
