@@ -14,12 +14,10 @@ module.exports = function (passport: any) {
         clientSecret: GOOGLE_CLIENT_SECRET,
         callbackURL: "http://localhost:5000/google/auth/callback",
       },
-      async function (
-        accessToken: any,
-        refreshToken: any,
-        profile: any,
-        cb: any
-      ) {
+      async function (accessToken, refreshToken, profile, cb) {
+        //cb is callback
+
+
         const newUser = {
           google_id: profile.id,
           first_name: profile.name.givenName,
@@ -29,11 +27,10 @@ module.exports = function (passport: any) {
 
         try {
           let user = await User.findOne({ google_id: profile.id });
+          //user exist in the db
           if (user) {
-            console.log("User exist:", user);
             cb(null, user);
           } else {
-            console.log("User doesn't exist");
             user = await User.create(newUser);
             cb(null, user);
           }
