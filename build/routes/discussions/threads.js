@@ -37,8 +37,8 @@ router.post("/make", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0,
             return;
         }
         var discussionFormatted = req.body;
-        discussionFormatted.creator = req.user._id;
-        const forum = yield threads_1.createThread(req.body);
+        //discussionFormatted.creator = req.user.first_name + req.user.last_name;
+        const forum = yield threads_1.createThread(discussionFormatted);
         res.send(forum);
     }
     catch (err) {

@@ -35,9 +35,9 @@ router.post("/make", jsonParser, async (req: any, res: any) => {
       return;
     }
     var discussionFormatted = req.body;
-    discussionFormatted.creator = req.user._id;
+    //discussionFormatted.creator = req.user.first_name + req.user.last_name;
 
-    const forum = await createThread(req.body);
+    const forum = await createThread(discussionFormatted);
 
     res.send(forum);
   } catch (err) {
