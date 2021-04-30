@@ -31,6 +31,7 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
 }));
 router.post("/make", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.body);
         if (!req.body.title || !req.body.post) {
             res.status(400).json({ message: "Missing Params" });
             return;
@@ -70,3 +71,4 @@ router.patch("/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void
         throw err;
     }
 }));
+module.exports = router;

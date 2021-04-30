@@ -48,13 +48,14 @@ const utube = require("./build/routes/youtube");
 const leetcode = require("./build/routes/leetcode");
 const isAuth = require("./build/routes/isAuth");
 const discussion = require("./build/routes/discussions");
+const threads = require("./build/routes/discussions/threads.js");
 
 app.use("/google", sso);
 app.use("/api/youtube", utube);
 app.use("/api/leetcode", leetcode);
 app.use("/api/auth", isAuth);
 app.use("/api/discussion", discussion);
-//app.use("/api/threads", discussion);
+app.use("/api/threads", threads);
 
 app.listen(apiPort, function () {
   return console.log("Server running on port " + apiPort);
