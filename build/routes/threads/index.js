@@ -89,14 +89,16 @@ router.delete("/delete/:id", jsonParser, (req, res) => __awaiter(void 0, void 0,
         throw err;
     }
 }));
-router.patch("/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/update/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!req.body._id) {
+        if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        const forum = yield threads_1.updatethread(req.body);
-        res.send(forum);
+        var threadFormatted = req.body;
+        threadFormatted._id = req.params.id;
+        const thread = yield threads_1.updatethread(threadFormatted);
+        res.send(thread);
     }
     catch (err) {
         throw err;

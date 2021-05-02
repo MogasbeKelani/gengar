@@ -111,13 +111,15 @@ router.post("/create", jsonParser, async (req: any, res: any) => {
  * @param _id of the discussion you want to patch
  * @returns updated discussion
  */
-router.patch("/update", jsonParser, async (req: any, res: any) => {
+router.patch("/update/:id", jsonParser, async (req: any, res: any) => {
   try {
-    if (!req.body._id) {
+    if (!req.params.id) {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    const forum = await updateDiscussion(req.body);
+    var discussionFormatted = req.body;
+    discussionFormatted._id = req.params.id;
+    const forum = await updateDiscussion(discussionFormatted);
     res.send(forum);
   } catch (err) {
     throw err;

@@ -38,7 +38,7 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
 /**
  * Get all for everything ever
  */
-router.get("/getAll/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/all/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });

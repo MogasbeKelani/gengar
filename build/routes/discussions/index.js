@@ -108,13 +108,15 @@ router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 
  * @param _id of the discussion you want to patch
  * @returns updated discussion
  */
-router.patch("/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/update/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!req.body._id) {
+        if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        const forum = yield index_1.updateDiscussion(req.body);
+        var discussionFormatted = req.body;
+        discussionFormatted._id = req.params.id;
+        const forum = yield index_1.updateDiscussion(discussionFormatted);
         res.send(forum);
     }
     catch (err) {

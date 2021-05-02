@@ -34,7 +34,7 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
 /**
  * Get all for everything ever
  */
-router.get("/getAll/:id", jsonParser, async (req: any, res: any) => {
+router.get("/all/:id", jsonParser, async (req: any, res: any) => {
   try {
     if (!req.params.id) {
       res.status(400).json({ message: "Missing Params" });

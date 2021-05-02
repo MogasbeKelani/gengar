@@ -16,6 +16,9 @@ const posts_1 = require("../../controllers/posts");
 const router = express.Router();
 const bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
+/**
+ * @param id of the posts you want
+ */
 router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
@@ -85,14 +88,16 @@ router.delete("/delete/:id", jsonParser, (req, res) => __awaiter(void 0, void 0,
         throw err;
     }
 }));
-router.patch("/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/update/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!req.body._id) {
+        if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        const forum = yield posts_1.updatePost(req.body);
-        res.send(forum);
+        const postFormat = req.body;
+        postFormat._id = req.params.id;
+        const post = yield posts_1.updatePost(postFormat);
+        res.send(post);
     }
     catch (err) {
         throw err;
