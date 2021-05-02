@@ -1,7 +1,6 @@
 export interface threads {
   _id?: String;
   creator: String;
-  forum: String;
+  forumId: String;
   title: String;
-  post: String;
 }

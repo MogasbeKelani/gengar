@@ -11,95 +11,94 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-ignore // not typescript-ified yet
 const express = require("express");
-const index_1 = require("../../controllers/users/index");
-const index_2 = require("../../controllers/discussions/index");
-const index_3 = require("../../controllers/threads/index");
-const index_4 = require("../../controllers/posts/index");
+const threads_1 = require("../../controllers/threads");
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 const bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
-/**
- * @param _id for a user
- */
 router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        const user = yield index_1.getUserById(req.params.id);
-        res.send(user);
-    }
-    catch (err) {
-        throw err;
-    }
-}));
-/**
- * Get all for everything ever
- */
-router.get("/all/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        if (!req.params.id) {
-            res.status(400).json({ message: "Missing Params" });
-            return;
-        }
-        const threads = yield index_3.getThreadByUserId(req.params.id);
-        const posts = yield index_4.getPostByUserId(req.params.id);
-        var user = threads.concat(posts);
-        res.send(user);
-    }
-    catch (err) {
-        throw err;
-    }
-}));
-/**
- * @param creator for the discussions
- */
-router.get("/discussions/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        if (!req.params.id) {
-            res.status(400).json({ message: "Missing Params" });
-            return;
-        }
-        const forum = yield index_2.getDiscussionByUserId(req.params.id);
+        const forum = yield threads_1.getById(req.params.id);
         res.send(forum);
     }
     catch (err) {
         throw err;
     }
 }));
-/**
- * @param _id of the user you want to patch
- * @returns updated user
- */
-router.patch("/update/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/forum/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        const formatUser = req.body;
-        formatUser._id = req.params.id;
-        const user = yield index_1.updateUserAttribute(formatUser);
-        res.send(user);
+        const forum = yield threads_1.getByForumId(req.params.id);
+        res.send(forum);
     }
     catch (err) {
         throw err;
     }
 }));
-/**
- * @param _id of the user you want to delete
- * @returns success boolean
- */
+router.get("/user/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.params.id) {
+            res.status(400).json({ message: "Missing Params" });
+            return;
+        }
+        const forum = yield threads_1.getThreadByUserId(req.params.id);
+        res.send(forum);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
+router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.body.title) {
+            res.status(400).json({ message: "Missing Params" });
+            return;
+        }
+        if ((!req.user || !req.user._id) && !req.body.creator) {
+            res.status(400).json({ message: "User has not signed In" });
+            return;
+        }
+        var threadFormatted = req.body;
+        if (!req.body.creator) {
+            threadFormatted.creator = req.user._id;
+        }
+        const forum = yield threads_1.createThread(threadFormatted);
+        res.send(forum);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
 router.delete("/delete/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        const user = yield index_1.deleteUser(req.params.id);
-        res.send(user);
+        const forum = yield threads_1.deletethread(req.params.id);
+        res.send(forum);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
+router.patch("/update/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.params.id) {
+            res.status(400).json({ message: "Missing Params" });
+            return;
+        }
+        var threadFormatted = req.body;
+        threadFormatted._id = req.params.id;
+        const thread = yield threads_1.updatethread(threadFormatted);
+        res.send(thread);
     }
     catch (err) {
         throw err;

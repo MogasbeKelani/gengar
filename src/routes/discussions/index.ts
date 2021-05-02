@@ -44,6 +44,7 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
+
 /**
  * @param topic for a discussion
  * @returns list of discussions with that topic
@@ -80,6 +81,7 @@ router.get("/title/:title", jsonParser, async (req: any, res: any) => {
 });
 /**
  * @param req.body where body has atleast a title and a description
+ * If you are testing you can add creator just make sure creator is an ID of User
  * @requires User to be logged in. Front end does not pass user must be in session
  */
 
@@ -89,15 +91,15 @@ router.post("/create", jsonParser, async (req: any, res: any) => {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    console.log(req.user);
-    if (!req.user || !req.user._id) {
+    if ((!req.user || !req.user._id) && !req.body.creator) {
       res.status(400).json({ message: "User has not signed In" });
       return;
     }
     var discussionFormatted = req.body;
-    discussionFormatted.creator = req.user.first_name + req.user.last_name;
-
-    const forum = await createDiscussion(req.body);
+    if (!req.body.creator) {
+      discussionFormatted.creator = req.user._id;
+    }
+    const forum = await createDiscussion(discussionFormatted);
 
     res.send(forum);
   } catch (err) {
@@ -109,13 +111,15 @@ router.post("/create", jsonParser, async (req: any, res: any) => {
  * @param _id of the discussion you want to patch
  * @returns updated discussion
  */
-router.patch("/update", jsonParser, async (req: any, res: any) => {
+router.patch("/update/:id", jsonParser, async (req: any, res: any) => {
   try {
-    if (!req.body._id) {
+    if (!req.params.id) {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    const forum = await updateDiscussion(req.body);
+    var discussionFormatted = req.body;
+    discussionFormatted._id = req.params.id;
+    const forum = await updateDiscussion(discussionFormatted);
     res.send(forum);
   } catch (err) {
     throw err;

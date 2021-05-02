@@ -80,6 +80,7 @@ router.get("/title/:title", jsonParser, (req, res) => __awaiter(void 0, void 0, 
 }));
 /**
  * @param req.body where body has atleast a title and a description
+ * If you are testing you can add creator just make sure creator is an ID of User
  * @requires User to be logged in. Front end does not pass user must be in session
  */
 router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -88,14 +89,15 @@ router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        console.log(req.user);
-        if (!req.user || !req.user._id) {
+        if ((!req.user || !req.user._id) && !req.body.creator) {
             res.status(400).json({ message: "User has not signed In" });
             return;
         }
         var discussionFormatted = req.body;
-        discussionFormatted.creator = req.user.first_name + req.user.last_name;
-        const forum = yield index_1.createDiscussion(req.body);
+        if (!req.body.creator) {
+            discussionFormatted.creator = req.user._id;
+        }
+        const forum = yield index_1.createDiscussion(discussionFormatted);
         res.send(forum);
     }
     catch (err) {
@@ -106,13 +108,15 @@ router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 
  * @param _id of the discussion you want to patch
  * @returns updated discussion
  */
-router.patch("/update", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/update/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!req.body._id) {
+        if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        const forum = yield index_1.updateDiscussion(req.body);
+        var discussionFormatted = req.body;
+        discussionFormatted._id = req.params.id;
+        const forum = yield index_1.updateDiscussion(discussionFormatted);
         res.send(forum);
     }
     catch (err) {

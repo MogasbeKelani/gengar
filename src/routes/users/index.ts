@@ -3,10 +3,12 @@ const express = require("express");
 
 import {
   getUserById,
-  updateUser,
+  updateUserAttribute,
   deleteUser,
 } from "../../controllers/users/index";
-
+import { getDiscussionByUserId } from "../../controllers/discussions/index";
+import { getThreadByUserId } from "../../controllers/threads/index";
+import { getPostByUserId } from "../../controllers/posts/index";
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 const bodyParser = require("body-parser");
@@ -30,16 +32,52 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
 });
 
 /**
- * @param _id of the user you want to patch
- * @returns updated user
+ * Get all for everything ever
  */
-router.patch("/update", jsonParser, async (req: any, res: any) => {
+router.get("/all/:id", jsonParser, async (req: any, res: any) => {
   try {
-    if (!req.body._id) {
+    if (!req.params.id) {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    const user = await updateUser(req.body);
+    const threads = await getThreadByUserId(req.params.id);
+    const posts = await getPostByUserId(req.params.id);
+    var user = threads.concat(posts);
+    res.send(user);
+  } catch (err) {
+    throw err;
+  }
+});
+
+/**
+ * @param creator for the discussions
+ */
+router.get("/discussions/:id", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const forum = await getDiscussionByUserId(req.params.id);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+/**
+ * @param _id of the user you want to patch
+ * @returns updated user
+ */
+router.patch("/update/:id", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const formatUser = req.body;
+    formatUser._id = req.params.id;
+    const user = await updateUserAttribute(formatUser);
     res.send(user);
   } catch (err) {
     throw err;

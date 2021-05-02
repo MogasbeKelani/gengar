@@ -1,6 +1,6 @@
 import mongoose = require("mongoose");
 import { UserModelFunctions } from "../../models/general/models/user-model-functions";
-const User: UserModelFunctions = require("../../models/general/user-model");
+const User: UserModelFunctions = require("../../models/general/models/user-model");
 
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
 const GOOGLE_CLIENT_SECRET = configs.googleSSO.secret;
@@ -14,9 +14,13 @@ module.exports = function (passport: any) {
         clientSecret: GOOGLE_CLIENT_SECRET,
         callbackURL: "http://localhost:5000/google/auth/callback",
       },
-      async function (accessToken, refreshToken, profile, cb) {
+      async function (
+        accessToken: any,
+        refreshToken: any,
+        profile: any,
+        cb: any
+      ) {
         //cb is callback
-
 
         const newUser = {
           google_id: profile.id,

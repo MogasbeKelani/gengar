@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const User = require("../../models/general/user-model");
+const User = require("../../models/general/models/user-model");
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
 const GOOGLE_CLIENT_SECRET = configs.googleSSO.secret;
 let GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -21,7 +21,6 @@ module.exports = function (passport) {
     }, function (accessToken, refreshToken, profile, cb) {
         return __awaiter(this, void 0, void 0, function* () {
             //cb is callback
-            console.log(profile);
             const newUser = {
                 google_id: profile.id,
                 first_name: profile.name.givenName,
@@ -32,11 +31,9 @@ module.exports = function (passport) {
                 let user = yield User.findOne({ google_id: profile.id });
                 //user exist in the db
                 if (user) {
-                    console.log("User exist");
                     cb(null, user);
                 }
                 else {
-                    console.log("User doesn't exist");
                     user = yield User.create(newUser);
                     cb(null, user);
                 }

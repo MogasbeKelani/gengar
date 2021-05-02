@@ -7,8 +7,6 @@ const User = new Schema(
     first_name: { type: String, required: true },
     last_name: { type: String },
     image: { type: String, required: true },
-    threadCreated: [{ type: Schema.Types.ObjectId, ref: "thread" }],
-    postMade: [{ type: Schema.Types.ObjectId, ref: "post" }],
   },
   { timestamps: true }
 );

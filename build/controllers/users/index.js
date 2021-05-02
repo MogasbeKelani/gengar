@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.getUserById = void 0;
-const userSchema = require("../../models/general/user-model");
+exports.deleteUser = exports.removeUserAttribute = exports.updateUserAttribute = exports.getUserById = void 0;
+const userSchema = require("../../models/general/schemas/user-model");
 function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -31,7 +31,7 @@ function getUserById(id) {
     });
 }
 exports.getUserById = getUserById;
-function updateUser(patch) {
+function updateUserAttribute(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const result = yield userSchema.findOneAndUpdate({ _id: patch._id }, {
@@ -40,8 +40,6 @@ function updateUser(patch) {
                     first_name: patch.first_name,
                     last_name: patch.last_name,
                     image: patch.image,
-                    threadCreated: patch.threadCreated,
-                    postMade: patch.postMade,
                 },
             }, { new: true });
             return result;
@@ -51,7 +49,26 @@ function updateUser(patch) {
         }
     });
 }
-exports.updateUser = updateUser;
+exports.updateUserAttribute = updateUserAttribute;
+function removeUserAttribute(patch) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const result = yield userSchema.findOneAndUpdate({ _id: patch._id }, {
+                $set: {
+                    google_id: patch.google_id,
+                    first_name: patch.first_name,
+                    last_name: patch.last_name,
+                    image: patch.image,
+                },
+            }, { new: true });
+            return result;
+        }
+        catch (err) {
+            throw err;
+        }
+    });
+}
+exports.removeUserAttribute = removeUserAttribute;
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
