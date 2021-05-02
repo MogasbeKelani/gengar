@@ -1,4 +1,4 @@
-const userSchema = require("../../models/general/user-model");
+const userSchema = require("../../models/general/schemas/user-model");
 
 import { user } from "../../models/general/models/user-model";
 
@@ -23,9 +23,7 @@ export async function getUserById(id: String): Promise<user | any> {
   }
 }
 
-export async function updateUser(
-  patch: user
-): Promise<user | any> {
+export async function updateUserAttribute(patch: user): Promise<user | any> {
   try {
     const result = await userSchema.findOneAndUpdate(
       { _id: patch._id },
@@ -35,8 +33,25 @@ export async function updateUser(
           first_name: patch.first_name,
           last_name: patch.last_name,
           image: patch.image,
-          threadCreated: patch.threadCreated,
-          postMade: patch.postMade,
+        },
+      },
+      { new: true }
+    );
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
+export async function removeUserAttribute(patch: user): Promise<user | any> {
+  try {
+    const result = await userSchema.findOneAndUpdate(
+      { _id: patch._id },
+      {
+        $set: {
+          google_id: patch.google_id,
+          first_name: patch.first_name,
+          last_name: patch.last_name,
+          image: patch.image,
         },
       },
       { new: true }

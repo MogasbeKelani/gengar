@@ -3,7 +3,7 @@ const express = require("express");
 
 import {
   getUserById,
-  updateUser,
+  updateUserAttribute,
   deleteUser,
 } from "../../controllers/users/index";
 
@@ -33,13 +33,15 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
  * @param _id of the user you want to patch
  * @returns updated user
  */
-router.patch("/update", jsonParser, async (req: any, res: any) => {
+router.patch("/update/:id", jsonParser, async (req: any, res: any) => {
   try {
-    if (!req.body._id) {
+    if (!req.params.id) {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    const user = await updateUser(req.body);
+    const formatUser = req.body;
+    formatUser._id = req.params.id;
+    const user = await updateUserAttribute(formatUser);
     res.send(user);
   } catch (err) {
     throw err;

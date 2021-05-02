@@ -9,6 +9,7 @@ import {
   deleteDiscussion,
   updateDiscussion,
   getDiscussionByName,
+  getDiscussionByUserId,
 } from "../../controllers/discussions/index";
 
 // @ts-ignore // not typescript-ified yet
@@ -38,6 +39,22 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
       return;
     }
     const forum = await getDiscussionById(req.params.id);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+/**
+ * @param creator for a discussion user._id
+ */
+router.get("/user/:id", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const forum = await getDiscussionByUserId(req.params.id);
 
     res.send(forum);
   } catch (err) {
@@ -89,15 +106,15 @@ router.post("/create", jsonParser, async (req: any, res: any) => {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    console.log(req.user);
-    if (!req.user || !req.user._id) {
+    if ((!req.user || !req.user._id) && !req.body.creator) {
       res.status(400).json({ message: "User has not signed In" });
       return;
     }
     var discussionFormatted = req.body;
-    discussionFormatted.creator = req.user.first_name + req.user.last_name;
-
-    const forum = await createDiscussion(req.body);
+    if (!req.body.creator) {
+      discussionFormatted.creator = req.user._id;
+    }
+    const forum = await createDiscussion(discussionFormatted);
 
     res.send(forum);
   } catch (err) {

@@ -49,15 +49,17 @@ const leetcode = require("./build/routes/leetcode");
 const isAuth = require("./build/routes/isAuth");
 const discussion = require("./build/routes/discussions");
 const users = require("./build/routes/users");
-const threads = require("./build/routes/discussions/threads.js");
+const threads = require("./build/routes/threads");
+const posts = require("./build/routes/posts");
 
 app.use("/google", sso);
 app.use("/api/youtube", utube);
 app.use("/api/leetcode", leetcode);
 app.use("/api/auth", isAuth);
-app.use("/api/discussion", discussion);
+app.use("/api/discussions", discussion);
 app.use("/api/users", users);
 app.use("/api/threads", threads);
+app.use("/api/posts", posts);
 
 app.listen(apiPort, function () {
   return console.log("Server running on port " + apiPort);

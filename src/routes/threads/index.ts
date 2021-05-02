@@ -4,9 +4,11 @@ const express = require("express");
 import {
   createThread,
   getById,
-  deleteDiscussion,
-  updateDiscussion,
-} from "../../controllers/discussions/threads";
+  deletethread,
+  updatethread,
+  getThreadByUserId,
+  getByForumId,
+} from "../../controllers/threads";
 
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
@@ -26,18 +28,49 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
-
-router.post("/make", jsonParser, async (req: any, res: any) => {
+router.get("/forum/:id", jsonParser, async (req: any, res: any) => {
   try {
-    console.log(req.body);
-    if (!req.body.title || !req.body.post) {
+    if (!req.params.id) {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    var discussionFormatted = req.body;
-    //discussionFormatted.creator = req.user.first_name + req.user.last_name;
+    const forum = await getByForumId(req.params.id);
 
-    const forum = await createThread(discussionFormatted);
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+router.get("/user/:id", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const forum = await getThreadByUserId(req.params.id);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+
+router.post("/create", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.body.title) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    if ((!req.user || !req.user._id) && !req.body.creator) {
+      res.status(400).json({ message: "User has not signed In" });
+      return;
+    }
+    var threadFormatted = req.body;
+    if (!req.body.creator) {
+      threadFormatted.creator = req.user._id;
+    }
+
+    const forum = await createThread(threadFormatted);
 
     res.send(forum);
   } catch (err) {
@@ -51,7 +84,7 @@ router.delete("/delete/:id", jsonParser, async (req: any, res: any) => {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    const forum = await deleteDiscussion(req.params.id);
+    const forum = await deletethread(req.params.id);
 
     res.send(forum);
   } catch (err) {
@@ -65,7 +98,7 @@ router.patch("/update", jsonParser, async (req: any, res: any) => {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    const forum = await updateDiscussion(req.body);
+    const forum = await updatethread(req.body);
     res.send(forum);
   } catch (err) {
     throw err;

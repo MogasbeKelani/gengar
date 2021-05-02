@@ -9,19 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.removeUserAttribute = exports.updateUserAttribute = exports.getUserById = void 0;
-const userSchema = require("../../models/general/schemas/user-model");
-function getUserById(id) {
+exports.deletePost = exports.updatePost = exports.getPostByThreadId = exports.getPostById = exports.createPost = void 0;
+const postSchema = require("../../models/general/schemas/post-model");
+function createPost(forum) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield userSchema.findOne({ _id: id }, (err, userInfo) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                if (!userInfo) {
-                    return { success: false, error: `User not found` };
-                }
-                return { success: true, data: userInfo };
+            if (!forum) {
+                return { message: "no body in the request" };
+            }
+            const schema = new postSchema(forum);
+            var result = yield schema.save().then(() => {
+                return {
+                    success: true,
+                    id: schema._id,
+                    creator: schema.creator,
+                    message: "post created!",
+                    text: schema.text,
+                    time: schema.time,
+                    threadId: schema.threadId,
+                };
             });
             return result;
         }
@@ -30,16 +36,50 @@ function getUserById(id) {
         }
     });
 }
-exports.getUserById = getUserById;
-function updateUserAttribute(patch) {
+exports.createPost = createPost;
+function getPostById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield userSchema.findOneAndUpdate({ _id: patch._id }, {
+            var result = yield postSchema.findOne({ _id: id }, (err, post) => {
+                if (err) {
+                    return { success: false, error: err };
+                }
+                if (!post) {
+                    return { success: false, error: `post not found` };
+                }
+                return { success: true, data: post };
+            });
+            return result;
+        }
+        catch (err) {
+            throw err;
+        }
+    });
+}
+exports.getPostById = getPostById;
+function getPostByThreadId(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            var result = yield postSchema.find({ threadId: id }, (err, post) => {
+                if (err) {
+                    return { success: false, error: err };
+                }
+                return { success: true, data: post };
+            });
+            return result;
+        }
+        catch (err) {
+            throw err;
+        }
+    });
+}
+exports.getPostByThreadId = getPostByThreadId;
+function updatePost(patch) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const result = yield postSchema.findOneAndUpdate({ _id: patch._id }, {
                 $set: {
-                    google_id: patch.google_id,
-                    first_name: patch.first_name,
-                    last_name: patch.last_name,
-                    image: patch.image,
+                    text: patch.text,
                 },
             }, { new: true });
             return result;
@@ -49,30 +89,11 @@ function updateUserAttribute(patch) {
         }
     });
 }
-exports.updateUserAttribute = updateUserAttribute;
-function removeUserAttribute(patch) {
+exports.updatePost = updatePost;
+function deletePost(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield userSchema.findOneAndUpdate({ _id: patch._id }, {
-                $set: {
-                    google_id: patch.google_id,
-                    first_name: patch.first_name,
-                    last_name: patch.last_name,
-                    image: patch.image,
-                },
-            }, { new: true });
-            return result;
-        }
-        catch (err) {
-            throw err;
-        }
-    });
-}
-exports.removeUserAttribute = removeUserAttribute;
-function deleteUser(id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            var result = yield userSchema
+            var result = yield postSchema
                 .findByIdAndRemove(id)
                 .then((response) => {
                 return response;
@@ -90,4 +111,4 @@ function deleteUser(id) {
         }
     });
 }
-exports.deleteUser = deleteUser;
+exports.deletePost = deletePost;

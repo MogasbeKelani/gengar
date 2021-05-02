@@ -1,6 +1,5 @@
 const discussionSchema = require("../../models/general/schemas/forum-model");
-
-import { OAuth2Client } from "google-auth-library";
+const mongoose = require("mongoose");
 import { discussion } from "../../models/general/models/forum-model";
 
 export async function createDiscussion(
@@ -15,12 +14,11 @@ export async function createDiscussion(
     var result = await schema.save().then(() => {
       return {
         success: true,
-        id: schema._id,
+        _id: schema._id,
         creator: schema.creator,
         message: "Discussion created!",
         title: schema.title,
-        discussion: schema.discussion,
-        threads: schema.threads,
+        description: schema.description,
         topics: schema.topics,
       };
     });
@@ -103,10 +101,30 @@ export async function getDiscussionByName(
     throw err;
   }
 }
+export async function getDiscussionByUserId(
+  id: String
+): Promise<discussion | any> {
+  try {
+    var result = await discussionSchema.find(
+      { creator: id },
+      (err: any, forums: [discussion]) => {
+        if (err) {
+          return { success: false, error: err };
+        }
+
+        return { success: true, data: forums };
+      }
+    );
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
 export async function updateDiscussion(
   patch: discussion
 ): Promise<discussion | any> {
   try {
+    console.log(patch);
     const result = await discussionSchema.findOneAndUpdate(
       { _id: patch._id },
       {
@@ -114,7 +132,6 @@ export async function updateDiscussion(
           creator: patch.creator,
           title: patch.title,
           description: patch.description,
-          threads: patch.threads,
           topics: patch.topics,
         },
       },
