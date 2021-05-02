@@ -13,6 +13,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const index_1 = require("../../controllers/users/index");
 const index_2 = require("../../controllers/discussions/index");
+const index_3 = require("../../controllers/threads/index");
+const index_4 = require("../../controllers/posts/index");
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 const bodyParser = require("body-parser");
@@ -27,6 +29,24 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
             return;
         }
         const user = yield index_1.getUserById(req.params.id);
+        res.send(user);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
+/**
+ * Get all for everything ever
+ */
+router.get("/getAll/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.params.id) {
+            res.status(400).json({ message: "Missing Params" });
+            return;
+        }
+        const threads = yield index_3.getThreadByUserId(req.params.id);
+        const posts = yield index_4.getPostByUserId(req.params.id);
+        var user = threads.concat(posts);
         res.send(user);
     }
     catch (err) {

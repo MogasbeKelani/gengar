@@ -7,6 +7,8 @@ import {
   deleteUser,
 } from "../../controllers/users/index";
 import { getDiscussionByUserId } from "../../controllers/discussions/index";
+import { getThreadByUserId } from "../../controllers/threads/index";
+import { getPostByUserId } from "../../controllers/posts/index";
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 const bodyParser = require("body-parser");
@@ -23,6 +25,24 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
     }
     const user = await getUserById(req.params.id);
 
+    res.send(user);
+  } catch (err) {
+    throw err;
+  }
+});
+
+/**
+ * Get all for everything ever
+ */
+router.get("/getAll/:id", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const threads = await getThreadByUserId(req.params.id);
+    const posts = await getPostByUserId(req.params.id);
+    var user = threads.concat(posts);
     res.send(user);
   } catch (err) {
     throw err;

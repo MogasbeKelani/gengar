@@ -47,6 +47,25 @@ export async function getPostById(id: String): Promise<post | any> {
     throw err;
   }
 }
+
+export async function getPostByUserId(id: String): Promise<post | any> {
+  try {
+    var result = await postSchema.find(
+      { creator: id },
+      (err: any, posts: [post]) => {
+        if (err) {
+          return { success: false, error: err };
+        }
+
+        return { success: true, data: posts };
+      }
+    );
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function getPostByThreadId(id: String): Promise<post | any> {
   try {
     var result = await postSchema.find(

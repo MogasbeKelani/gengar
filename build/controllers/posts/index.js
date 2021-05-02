@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePost = exports.updatePost = exports.getPostByThreadId = exports.getPostById = exports.createPost = void 0;
+exports.deletePost = exports.updatePost = exports.getPostByThreadId = exports.getPostByUserId = exports.getPostById = exports.createPost = void 0;
 const postSchema = require("../../models/general/schemas/post-model");
 function createPost(forum) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -57,6 +57,23 @@ function getPostById(id) {
     });
 }
 exports.getPostById = getPostById;
+function getPostByUserId(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            var result = yield postSchema.find({ creator: id }, (err, posts) => {
+                if (err) {
+                    return { success: false, error: err };
+                }
+                return { success: true, data: posts };
+            });
+            return result;
+        }
+        catch (err) {
+            throw err;
+        }
+    });
+}
+exports.getPostByUserId = getPostByUserId;
 function getPostByThreadId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
