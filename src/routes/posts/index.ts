@@ -28,7 +28,7 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
   }
 });
 /**
- * @param creator for a discussion user._id
+ * @param threadId of the posts you want
  */
 router.get("/thread/:id", jsonParser, async (req: any, res: any) => {
   try {
@@ -43,6 +43,10 @@ router.get("/thread/:id", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
+
+/**
+ * @param req.body where body has atleast a text and a threadId
+ */
 
 router.post("/create", jsonParser, async (req: any, res: any) => {
   try {
@@ -68,7 +72,9 @@ router.post("/create", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
-
+/**
+ * @param id of the post you are deleting
+ */
 router.delete("/delete/:id", jsonParser, async (req: any, res: any) => {
   try {
     if (!req.params.id) {

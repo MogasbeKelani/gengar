@@ -6,7 +6,7 @@ import {
   updateUserAttribute,
   deleteUser,
 } from "../../controllers/users/index";
-
+import { getDiscussionByUserId } from "../../controllers/discussions/index";
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 const bodyParser = require("body-parser");
@@ -29,6 +29,22 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
   }
 });
 
+/**
+ * @param creator for the discussions
+ */
+router.get("/discussions/:id", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const forum = await getDiscussionByUserId(req.params.id);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
 /**
  * @param _id of the user you want to patch
  * @returns updated user

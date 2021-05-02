@@ -45,22 +45,6 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 }));
 /**
- * @param creator for a discussion user._id
- */
-router.get("/user/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        if (!req.params.id) {
-            res.status(400).json({ message: "Missing Params" });
-            return;
-        }
-        const forum = yield index_1.getDiscussionByUserId(req.params.id);
-        res.send(forum);
-    }
-    catch (err) {
-        throw err;
-    }
-}));
-/**
  * @param topic for a discussion
  * @returns list of discussions with that topic
  */
@@ -96,6 +80,7 @@ router.get("/title/:title", jsonParser, (req, res) => __awaiter(void 0, void 0, 
 }));
 /**
  * @param req.body where body has atleast a title and a description
+ * If you are testing you can add creator just make sure creator is an ID of User
  * @requires User to be logged in. Front end does not pass user must be in session
  */
 router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

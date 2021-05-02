@@ -30,7 +30,7 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 }));
 /**
- * @param creator for a discussion user._id
+ * @param threadId of the posts you want
  */
 router.get("/thread/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -45,6 +45,9 @@ router.get("/thread/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, vo
         throw err;
     }
 }));
+/**
+ * @param req.body where body has atleast a text and a threadId
+ */
 router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.body.text || !req.body.threadId) {
@@ -66,6 +69,9 @@ router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 
         throw err;
     }
 }));
+/**
+ * @param id of the post you are deleting
+ */
 router.delete("/delete/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {

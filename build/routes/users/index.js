@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-ignore // not typescript-ified yet
 const express = require("express");
 const index_1 = require("../../controllers/users/index");
+const index_2 = require("../../controllers/discussions/index");
 // @ts-ignore // not typescript-ified yet
 const router = express.Router();
 const bodyParser = require("body-parser");
@@ -27,6 +28,22 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
         }
         const user = yield index_1.getUserById(req.params.id);
         res.send(user);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
+/**
+ * @param creator for the discussions
+ */
+router.get("/discussions/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.params.id) {
+            res.status(400).json({ message: "Missing Params" });
+            return;
+        }
+        const forum = yield index_2.getDiscussionByUserId(req.params.id);
+        res.send(forum);
     }
     catch (err) {
         throw err;
