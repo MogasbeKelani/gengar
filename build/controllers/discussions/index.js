@@ -75,7 +75,7 @@ exports.getDiscussionById = getDiscussionById;
 function getDiscussionByTopic(topic) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield discussionSchema.find({ topics: { $all: topic } }, (err, forums) => {
+            var result = yield discussionSchema.find({ topics: { $regex: ".*" + topic + ".*" } }, (err, forums) => {
                 if (err) {
                     return { success: false, error: err };
                 }

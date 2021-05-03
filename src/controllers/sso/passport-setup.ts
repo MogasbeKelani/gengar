@@ -1,6 +1,5 @@
 import mongoose = require("mongoose");
-import { UserModelFunctions } from "../../models/general/models/user-model-functions";
-const User: UserModelFunctions = require("../../models/general/models/user-model");
+const User = require("../../models/general/schemas/user-model");
 
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
 const GOOGLE_CLIENT_SECRET = configs.googleSSO.secret;

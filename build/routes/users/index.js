@@ -22,6 +22,23 @@ var jsonParser = bodyParser.json();
 /**
  * @param _id for a user
  */
+router.get("/self", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.user || !req.user._id) {
+            res.status(400).json({ message: "Not Signed In" });
+            return;
+        }
+        console.log(req.user);
+        const user = yield index_1.getUserById(req.user._id);
+        res.send(user);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
+/**
+ * @param _id for a user
+ */
 router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
@@ -38,7 +55,7 @@ router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, f
 /**
  * Get all for everything ever
  */
-router.get("/all/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/comments/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
             res.status(400).json({ message: "Missing Params" });
@@ -46,6 +63,24 @@ router.get("/all/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 
         }
         const threads = yield index_3.getThreadByUserId(req.params.id);
         const posts = yield index_4.getPostByUserId(req.params.id);
+        var user = threads.concat(posts);
+        res.send(user);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
+/**
+ * Get all for everything ever
+ */
+router.get("/self/comments", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.user || !req.user._id) {
+            res.status(400).json({ message: "Not Signed In" });
+            return;
+        }
+        const threads = yield index_3.getThreadByUserId(req.user._id);
+        const posts = yield index_4.getPostByUserId(req.user._id);
         var user = threads.concat(posts);
         res.send(user);
     }
@@ -70,17 +105,33 @@ router.get("/discussions/:id", jsonParser, (req, res) => __awaiter(void 0, void 
     }
 }));
 /**
+ * @param creator for the discussions
+ */
+router.get("/self/discussions/", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.user || !req.user._id) {
+            res.status(400).json({ message: "Not Signed In" });
+            return;
+        }
+        const forum = yield index_2.getDiscussionByUserId(req.user._id);
+        res.send(forum);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
+/**
  * @param _id of the user you want to patch
  * @returns updated user
  */
-router.patch("/update/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/update/", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!req.params.id) {
-            res.status(400).json({ message: "Missing Params" });
+        if (!req.user || !req.user._id) {
+            res.status(400).json({ message: "Not Sign in" });
             return;
         }
         const formatUser = req.body;
-        formatUser._id = req.params.id;
+        formatUser._id = req.user._id;
         const user = yield index_1.updateUserAttribute(formatUser);
         res.send(user);
     }
@@ -92,13 +143,13 @@ router.patch("/update/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, 
  * @param _id of the user you want to delete
  * @returns success boolean
  */
-router.delete("/delete/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete("/delete/", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!req.params.id) {
+        if (!req.user || !req.user._id) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        const user = yield index_1.deleteUser(req.params.id);
+        const user = yield index_1.deleteUser(req.user._id);
         res.send(user);
     }
     catch (err) {

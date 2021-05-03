@@ -68,7 +68,7 @@ export async function getDiscussionByTopic(
 ): Promise<discussion | any> {
   try {
     var result = await discussionSchema.find(
-      { topics: { $all: topic } },
+      { topics: { $regex: ".*" + topic + ".*" } },
       (err: any, forums: discussion) => {
         if (err) {
           return { success: false, error: err };

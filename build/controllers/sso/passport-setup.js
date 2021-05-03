@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const User = require("../../models/general/models/user-model");
+const User = require("../../models/general/schemas/user-model");
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
 const GOOGLE_CLIENT_SECRET = configs.googleSSO.secret;
 let GoogleStrategy = require("passport-google-oauth20").Strategy;

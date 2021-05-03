@@ -12,7 +12,7 @@ export async function createPost(forum: post): Promise<post | any> {
     var result = await schema.save().then(() => {
       return {
         success: true,
-        id: schema._id,
+        _id: schema._id,
         creator: schema.creator,
         message: "post created!",
         text: schema.text,
