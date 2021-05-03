@@ -63,7 +63,7 @@ function updatethread(patch) {
                 $set: {
                     creator: patch.creator,
                     forumId: patch.forumId,
-                    title: patch.title,
+                    text: patch.text,
                 },
             }, { new: true });
             return result;

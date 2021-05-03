@@ -57,7 +57,7 @@ router.get("/user/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void
 }));
 router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!req.body.title) {
+        if (!req.body.text) {
             res.status(400).json({ message: "Missing Params" });
             return;
         }

@@ -55,7 +55,7 @@ export async function updatethread(patch: threads): Promise<threads | any> {
         $set: {
           creator: patch.creator,
           forumId: patch.forumId,
-          title: patch.title,
+          text: patch.text,
         },
       },
       { new: true }
