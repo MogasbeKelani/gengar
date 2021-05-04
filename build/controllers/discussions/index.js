@@ -10,26 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDiscussion = exports.updateDiscussion = exports.getDiscussionByUserId = exports.getDiscussionByName = exports.getDiscussionByTopic = exports.getDiscussionById = exports.getDiscussions = exports.createDiscussion = void 0;
-const discussionSchema = require("../../models/general/schemas/forum-model");
-const mongoose = require("mongoose");
+var ObjectId = require("mongodb").ObjectID;
 function createDiscussion(forum) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (!forum) {
                 return { message: "no body in the request" };
             }
-            const schema = new discussionSchema(forum);
-            var result = yield schema.save().then(() => {
-                return {
-                    success: true,
-                    _id: schema._id,
-                    creator: schema.creator,
-                    message: "Discussion created!",
-                    title: schema.title,
-                    description: schema.description,
-                    topics: schema.topics,
-                };
-            });
+            console.log(forum);
+            const result = client.db("GitGud").collection("forum").insertOne(forum);
             return result;
         }
         catch (err) {
@@ -41,9 +30,7 @@ exports.createDiscussion = createDiscussion;
 function getDiscussions() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield discussionSchema.find({}, (err, forums) => {
-                return { success: true, data: forums };
-            });
+            var result = yield client.db("GitGud").collection("forum").find().toArray();
             return result;
         }
         catch (err) {
@@ -55,15 +42,10 @@ exports.getDiscussions = getDiscussions;
 function getDiscussionById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield discussionSchema.findOne({ _id: id }, (err, forums) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                if (!forums) {
-                    return { success: false, error: `Discussion not found` };
-                }
-                return { success: true, data: forums };
-            });
+            var result = yield client
+                .db("GitGud")
+                .collection("forum")
+                .findOne({ _id: ObjectId(id) });
             return result;
         }
         catch (err) {
@@ -75,12 +57,11 @@ exports.getDiscussionById = getDiscussionById;
 function getDiscussionByTopic(topic) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield discussionSchema.find({ topics: { $regex: ".*" + topic + ".*" } }, (err, forums) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: forums };
-            });
+            var result = yield client
+                .db("GitGud")
+                .collection("forum")
+                .find({ topics: { $regex: ".*" + topic + ".*" } })
+                .toArray();
             return result;
         }
         catch (err) {
@@ -92,12 +73,11 @@ exports.getDiscussionByTopic = getDiscussionByTopic;
 function getDiscussionByName(name) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield discussionSchema.find({ title: { $regex: ".*" + name + ".*" } }, (err, forums) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: forums };
-            });
+            var result = yield client
+                .db("GitGud")
+                .collection("forum")
+                .find({ title: { $regex: ".*" + name + ".*" } })
+                .toArray();
             return result;
         }
         catch (err) {
@@ -109,12 +89,10 @@ exports.getDiscussionByName = getDiscussionByName;
 function getDiscussionByUserId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield discussionSchema.find({ creator: id }, (err, forums) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: forums };
-            });
+            var result = yield client
+                .db("GitGud")
+                .collection("forum")
+                .find({ creator: ObjectId(id) });
             return result;
         }
         catch (err) {
@@ -127,7 +105,10 @@ function updateDiscussion(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             console.log(patch);
-            const result = yield discussionSchema.findOneAndUpdate({ _id: patch._id }, {
+            const result = yield client
+                .db("GitGud")
+                .collection("forum")
+                .findOneAndUpdate({ _id: patch._id }, {
                 $set: {
                     creator: patch.creator,
                     title: patch.title,
@@ -146,14 +127,10 @@ exports.updateDiscussion = updateDiscussion;
 function deleteDiscussion(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield discussionSchema
-                .findByIdAndRemove(id)
-                .then((response) => {
-                return response;
-            })
-                .catch((err) => {
-                return err;
-            });
+            var result = yield client
+                .db("GitGud")
+                .collection("forum")
+                .findByIdAndRemove(id);
             if (!result) {
                 return { success: false };
             }
