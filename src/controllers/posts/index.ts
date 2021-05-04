@@ -1,5 +1,3 @@
-const postSchema = require("../../models/general/schemas/post-model");
-
 import { post } from "../../models/general/models/post-model";
 
 export async function createPost(forum: post): Promise<post | any> {
@@ -7,12 +5,12 @@ export async function createPost(forum: post): Promise<post | any> {
     if (!forum) {
       return { message: "no body in the request" };
     }
-    const schema = new postSchema(forum);
+    const schema = new client.db("GitGud").collection("post")(forum);
 
     var result = await schema.save().then(() => {
       return {
         success: true,
-        id: schema._id,
+        _id: schema._id,
         creator: schema.creator,
         message: "post created!",
         text: schema.text,
@@ -29,9 +27,10 @@ export async function createPost(forum: post): Promise<post | any> {
 
 export async function getPostById(id: String): Promise<post | any> {
   try {
-    var result = await postSchema.findOne(
-      { _id: id },
-      (err: any, post: post) => {
+    var result = await client
+      .db("GitGud")
+      .collection("post")
+      .findOne({ _id: id }, (err: any, post: post) => {
         if (err) {
           return { success: false, error: err };
         }
@@ -40,8 +39,7 @@ export async function getPostById(id: String): Promise<post | any> {
           return { success: false, error: `post not found` };
         }
         return { success: true, data: post };
-      }
-    );
+      });
     return result;
   } catch (err) {
     throw err;
@@ -50,16 +48,16 @@ export async function getPostById(id: String): Promise<post | any> {
 
 export async function getPostByUserId(id: String): Promise<post | any> {
   try {
-    var result = await postSchema.find(
-      { creator: id },
-      (err: any, posts: [post]) => {
+    var result = await client
+      .db("GitGud")
+      .collection("post")
+      .find({ creator: id }, (err: any, posts: [post]) => {
         if (err) {
           return { success: false, error: err };
         }
 
         return { success: true, data: posts };
-      }
-    );
+      });
     return result;
   } catch (err) {
     throw err;
@@ -68,16 +66,16 @@ export async function getPostByUserId(id: String): Promise<post | any> {
 
 export async function getPostByThreadId(id: String): Promise<post | any> {
   try {
-    var result = await postSchema.find(
-      { threadId: id },
-      (err: any, post: post) => {
+    var result = await client
+      .db("GitGud")
+      .collection("post")
+      .find({ threadId: id }, (err: any, post: post) => {
         if (err) {
           return { success: false, error: err };
         }
 
         return { success: true, data: post };
-      }
-    );
+      });
     return result;
   } catch (err) {
     throw err;
@@ -86,15 +84,18 @@ export async function getPostByThreadId(id: String): Promise<post | any> {
 
 export async function updatePost(patch: post): Promise<post | any> {
   try {
-    const result = await postSchema.findOneAndUpdate(
-      { _id: patch._id },
-      {
-        $set: {
-          text: patch.text,
+    const result = await client
+      .db("GitGud")
+      .collection("post")
+      .findOneAndUpdate(
+        { _id: patch._id },
+        {
+          $set: {
+            text: patch.text,
+          },
         },
-      },
-      { new: true }
-    );
+        { new: true }
+      );
     return result;
   } catch (err) {
     throw err;
@@ -103,7 +104,9 @@ export async function updatePost(patch: post): Promise<post | any> {
 
 export async function deletePost(id: String): Promise<post | any> {
   try {
-    var result = await postSchema
+    var result = await client
+      .db("GitGud")
+      .collection("post")
       .findByIdAndRemove(id)
       .then((response: any) => {
         return response;

@@ -10,18 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePost = exports.updatePost = exports.getPostByThreadId = exports.getPostByUserId = exports.getPostById = exports.createPost = void 0;
-const postSchema = require("../../models/general/schemas/post-model");
 function createPost(forum) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (!forum) {
                 return { message: "no body in the request" };
             }
-            const schema = new postSchema(forum);
+            const schema = new client.db("GitGud").collection("post")(forum);
             var result = yield schema.save().then(() => {
                 return {
                     success: true,
-                    id: schema._id,
+                    _id: schema._id,
                     creator: schema.creator,
                     message: "post created!",
                     text: schema.text,
@@ -40,7 +39,10 @@ exports.createPost = createPost;
 function getPostById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield postSchema.findOne({ _id: id }, (err, post) => {
+            var result = yield client
+                .db("GitGud")
+                .collection("post")
+                .findOne({ _id: id }, (err, post) => {
                 if (err) {
                     return { success: false, error: err };
                 }
@@ -60,7 +62,10 @@ exports.getPostById = getPostById;
 function getPostByUserId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield postSchema.find({ creator: id }, (err, posts) => {
+            var result = yield client
+                .db("GitGud")
+                .collection("post")
+                .find({ creator: id }, (err, posts) => {
                 if (err) {
                     return { success: false, error: err };
                 }
@@ -77,7 +82,10 @@ exports.getPostByUserId = getPostByUserId;
 function getPostByThreadId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield postSchema.find({ threadId: id }, (err, post) => {
+            var result = yield client
+                .db("GitGud")
+                .collection("post")
+                .find({ threadId: id }, (err, post) => {
                 if (err) {
                     return { success: false, error: err };
                 }
@@ -94,7 +102,10 @@ exports.getPostByThreadId = getPostByThreadId;
 function updatePost(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield postSchema.findOneAndUpdate({ _id: patch._id }, {
+            const result = yield client
+                .db("GitGud")
+                .collection("post")
+                .findOneAndUpdate({ _id: patch._id }, {
                 $set: {
                     text: patch.text,
                 },
@@ -110,7 +121,9 @@ exports.updatePost = updatePost;
 function deletePost(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield postSchema
+            var result = yield client
+                .db("GitGud")
+                .collection("post")
                 .findByIdAndRemove(id)
                 .then((response) => {
                 return response;

@@ -14,13 +14,13 @@ export async function allQuestions(): Promise<problemList> {
     const allProblems = await fetch("https://leetcode.com/api/problems/all/", {
       mode: "cors",
     })
-      .then(function(response: any) {
+      .then(function (response: any) {
         return response.json();
       })
-      .catch(function(error: any) {
+      .catch(function (error: any) {
         console.log("Request failed", error);
       });
-    const problemCrunch = allProblems.stat_status_pairs.map(function(x: any) {
+    const problemCrunch = allProblems.stat_status_pairs.map(function (x: any) {
       return {
         title: x.stat.question__title,
         questionTitleSlug: x.stat.question__title_slug,
@@ -38,7 +38,7 @@ export async function allQuestions(): Promise<problemList> {
  * @return singleProblemResponse Full Info of a leetcode problem
  */
 export async function singleQuestion(
-  title: singleProblemRequest,
+  title: singleProblemRequest
 ): Promise<singleProblemResponse> {
   try {
     const singleProblem = await fetch("https://leetcode.com/graphql", {
@@ -53,10 +53,10 @@ export async function singleQuestion(
       method: "POST",
       mode: "cors",
     })
-      .then(function(response: any) {
+      .then(function (response: any) {
         return response.json();
       })
-      .catch(function(error: any) {
+      .catch(function (error: any) {
         console.log("Request failed", error);
       });
 
@@ -69,10 +69,10 @@ export async function singleQuestion(
       dislikes: singleProblem.data.question.dislikes,
       stats: JSON.parse(singleProblem.data.question.stats || "[]"),
       topicTags: (singleProblem.data.question.topicTags || []).map(
-        (x: any) => x.name,
+        (x: any) => x.name
       ),
       languages: (singleProblem.data.question.codeSnippets || []).map(
-        (x: any) => x.lang,
+        (x: any) => x.lang
       ),
     };
     return singleProblemCrunch;

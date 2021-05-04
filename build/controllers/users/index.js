@@ -10,11 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.removeUserAttribute = exports.updateUserAttribute = exports.getUserById = void 0;
-const userSchema = require("../../models/general/schemas/user-model");
 function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield userSchema.findOne({ _id: id }, (err, userInfo) => {
+            var result = yield client
+                .db("GitGud")
+                .collection("user")
+                .findOne({ _id: id }, (err, userInfo) => {
                 if (err) {
                     return { success: false, error: err };
                 }
@@ -34,7 +36,10 @@ exports.getUserById = getUserById;
 function updateUserAttribute(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield userSchema.findOneAndUpdate({ _id: patch._id }, {
+            const result = yield client
+                .db("GitGud")
+                .collection("user")
+                .findOneAndUpdate({ _id: patch._id }, {
                 $set: {
                     google_id: patch.google_id,
                     first_name: patch.first_name,
@@ -53,7 +58,10 @@ exports.updateUserAttribute = updateUserAttribute;
 function removeUserAttribute(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield userSchema.findOneAndUpdate({ _id: patch._id }, {
+            const result = yield client
+                .db("GitGud")
+                .collection("user")
+                .findOneAndUpdate({ _id: patch._id }, {
                 $set: {
                     google_id: patch.google_id,
                     first_name: patch.first_name,
@@ -72,7 +80,9 @@ exports.removeUserAttribute = removeUserAttribute;
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield userSchema
+            var result = yield client
+                .db("GitGud")
+                .collection("user")
                 .findByIdAndRemove(id)
                 .then((response) => {
                 return response;

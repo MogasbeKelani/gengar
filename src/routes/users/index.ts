@@ -17,6 +17,24 @@ var jsonParser = bodyParser.json();
 /**
  * @param _id for a user
  */
+router.get("/self", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.user || !req.user._id) {
+      res.status(400).json({ message: "Not Signed In" });
+      return;
+    }
+    console.log(req.user);
+    const user = await getUserById(req.user._id);
+
+    res.send(user);
+  } catch (err) {
+    throw err;
+  }
+});
+
+/**
+ * @param _id for a user
+ */
 router.get("/:id", jsonParser, async (req: any, res: any) => {
   try {
     if (!req.params.id) {
@@ -34,7 +52,7 @@ router.get("/:id", jsonParser, async (req: any, res: any) => {
 /**
  * Get all for everything ever
  */
-router.get("/all/:id", jsonParser, async (req: any, res: any) => {
+router.get("/comments/:id", jsonParser, async (req: any, res: any) => {
   try {
     if (!req.params.id) {
       res.status(400).json({ message: "Missing Params" });
@@ -42,6 +60,23 @@ router.get("/all/:id", jsonParser, async (req: any, res: any) => {
     }
     const threads = await getThreadByUserId(req.params.id);
     const posts = await getPostByUserId(req.params.id);
+    var user = threads.concat(posts);
+    res.send(user);
+  } catch (err) {
+    throw err;
+  }
+});
+/**
+ * Get all for everything ever
+ */
+router.get("/self/comments", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.user || !req.user._id) {
+      res.status(400).json({ message: "Not Signed In" });
+      return;
+    }
+    const threads = await getThreadByUserId(req.user._id);
+    const posts = await getPostByUserId(req.user._id);
     var user = threads.concat(posts);
     res.send(user);
   } catch (err) {
@@ -66,17 +101,33 @@ router.get("/discussions/:id", jsonParser, async (req: any, res: any) => {
   }
 });
 /**
+ * @param creator for the discussions
+ */
+router.get("/self/discussions/", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.user || !req.user._id) {
+      res.status(400).json({ message: "Not Signed In" });
+      return;
+    }
+    const forum = await getDiscussionByUserId(req.user._id);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+/**
  * @param _id of the user you want to patch
  * @returns updated user
  */
-router.patch("/update/:id", jsonParser, async (req: any, res: any) => {
+router.patch("/update/", jsonParser, async (req: any, res: any) => {
   try {
-    if (!req.params.id) {
-      res.status(400).json({ message: "Missing Params" });
+    if (!req.user || !req.user._id) {
+      res.status(400).json({ message: "Not Sign in" });
       return;
     }
     const formatUser = req.body;
-    formatUser._id = req.params.id;
+    formatUser._id = req.user._id;
     const user = await updateUserAttribute(formatUser);
     res.send(user);
   } catch (err) {
@@ -88,13 +139,13 @@ router.patch("/update/:id", jsonParser, async (req: any, res: any) => {
  * @param _id of the user you want to delete
  * @returns success boolean
  */
-router.delete("/delete/:id", jsonParser, async (req: any, res: any) => {
+router.delete("/delete/", jsonParser, async (req: any, res: any) => {
   try {
-    if (!req.params.id) {
+    if (!req.user || !req.user._id) {
       res.status(400).json({ message: "Missing Params" });
       return;
     }
-    const user = await deleteUser(req.params.id);
+    const user = await deleteUser(req.user._id);
 
     res.send(user);
   } catch (err) {
