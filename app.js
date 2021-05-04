@@ -15,15 +15,14 @@ app.use(
 
 // Sets up the config YAML
 configs = yaml.load(fs.readFileSync("./config/ci.yaml", "utf8"));
+db.main(db.client);
 
+client = db.client;
 //SSO Configurations
 const passport = require("passport");
 require("./build/controllers/sso/passport-setup")(passport);
 const sso = require("./build/routes/google");
 const session = require("express-session");
-
-// Connects to Database
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.use(cors());
 app.use(express.json());

@@ -61,10 +61,6 @@ router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 
             res.status(400).json({ message: "Missing Params" });
             return;
         }
-        if ((!req.user || !req.user._id) && !req.body.creator) {
-            res.status(400).json({ message: "User has not signed In" });
-            return;
-        }
         var threadFormatted = req.body;
         if (!req.body.creator) {
             threadFormatted.creator = req.user._id;
