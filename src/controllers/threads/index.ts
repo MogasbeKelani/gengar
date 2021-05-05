@@ -1,24 +1,18 @@
+import { time } from "node:console";
 import { threads } from "../../models/general/models/thread-model";
+var ObjectId = require("mongodb").ObjectID;
+
 
 export async function createThread(original: threads): Promise<threads | any> {
   try {
     if (!original) {
       return { message: "no body in the request" };
     }
-    const schema = new client.db("GitGud").collection("thread")(original);
 
-    var result = await schema.save().then(() => {
-      return {
-        success: true,
-        _id: schema._id,
-        creator: schema.creator,
-        forumId: schema.forumId,
-        title: schema.title,
-        message: "successfuly commented",
-      };
-    });
+    const result = await client.db("GitGud").collection("thread").insertOne(original);
 
     return result;
+
   } catch (err) {
     throw err;
   }
@@ -26,58 +20,27 @@ export async function createThread(original: threads): Promise<threads | any> {
 
 export async function getById(id: String): Promise<threads | any> {
   try {
-    var result = await client
-      .db("GitGud")
-      .collection("thread")
-      .findOne({ _id: id }, (err: any, original: threads) => {
-        if (err) {
-          return { success: false, error: err };
-        }
 
-        if (!original) {
-          return { success: false, error: `thread not found` };
-        }
-        return { success: true, data: original };
-      });
+    var result = await client.db("GitGud").collection("thread").findOne({ _id: ObjectId(id) });
     return result;
+
   } catch (err) {
     throw err;
   }
 }
 
-export async function updatethread(patch: threads): Promise<threads | any> {
+export async function getByForumId(id: String): Promise<threads | any> {
   try {
-    const result = await client
-      .db("GitGud")
-      .collection("thread")
-      .findOneAndUpdate(
-        { _id: patch._id },
-        {
-          $set: {
-            creator: patch.creator,
-            forumId: patch.forumId,
-            text: patch.text,
-          },
-        },
-        { new: true }
-      );
-    return result;
+    var result = await client.db("GitGud").collection("thread").find({ forumId: id }).toArray();
   } catch (err) {
     throw err;
   }
 }
+
 export async function getThreadByUserId(id: String): Promise<threads | any> {
   try {
-    var result = await client
-      .db("GitGud")
-      .collection("thread")
-      .find({ creator: id }, (err: any, threads: [threads]) => {
-        if (err) {
-          return { success: false, error: err };
-        }
+    const result = await client.db("GitGud").collection("thread").find({creator : id}).toArray();
 
-        return { success: true, data: threads };
-      });
     return result;
   } catch (err) {
     throw err;
@@ -86,16 +49,10 @@ export async function getThreadByUserId(id: String): Promise<threads | any> {
 
 export async function deletethread(id: String): Promise<threads | any> {
   try {
-    var result = await client
-      .db("GitGud")
-      .collection("thread")
-      .findByIdAndRemove(id)
-      .then((response: any) => {
-        return response;
-      })
-      .catch((err: any) => {
-        return err;
-      });
+    
+
+    var result = await client.db("GitGud").collection("thread").deleteOne({_id : ObjectId(id)});
+
     if (!result) {
       return { success: false };
     }
@@ -106,23 +63,23 @@ export async function deletethread(id: String): Promise<threads | any> {
   }
 }
 
-export async function getByForumId(id: String): Promise<threads | any> {
+export async function updatethread(patch: threads): Promise<threads | any> {
   try {
-    var result = await client
-      .db("GitGud")
-      .collection("thread")
-      .find({ forumId: id }, (err: any, original: threads) => {
-        if (err) {
-          return { success: false, error: err };
-        }
 
-        if (!original) {
-          return { success: false, error: `Thread not found` };
-        }
-        return { success: true, data: original };
-      });
+      const result = await client.db("GitGud").collection("thread").findOneAndUpdate(
+        { _id: ObjectId(patch._id) },
+        {
+          $set: {
+            text: patch.text,
+            update_date: Date.now,
+          },
+        },
+        { new: true }
+      );
+
     return result;
   } catch (err) {
     throw err;
   }
 }
+

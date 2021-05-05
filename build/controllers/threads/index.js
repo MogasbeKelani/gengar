@@ -9,24 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getByForumId = exports.deletethread = exports.getThreadByUserId = exports.updatethread = exports.getById = exports.createThread = void 0;
+exports.updatethread = exports.deletethread = exports.getThreadByUserId = exports.getByForumId = exports.getById = exports.createThread = void 0;
+var ObjectId = require("mongodb").ObjectID;
 function createThread(original) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (!original) {
                 return { message: "no body in the request" };
             }
-            const schema = new client.db("GitGud").collection("thread")(original);
-            var result = yield schema.save().then(() => {
-                return {
-                    success: true,
-                    _id: schema._id,
-                    creator: schema.creator,
-                    forumId: schema.forumId,
-                    title: schema.title,
-                    message: "successfuly commented",
-                };
-            });
+            const result = yield client.db("GitGud").collection("thread").insertOne(original);
             return result;
         }
         catch (err) {
@@ -38,18 +29,7 @@ exports.createThread = createThread;
 function getById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield client
-                .db("GitGud")
-                .collection("thread")
-                .findOne({ _id: id }, (err, original) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                if (!original) {
-                    return { success: false, error: `thread not found` };
-                }
-                return { success: true, data: original };
-            });
+            var result = yield client.db("GitGud").collection("thread").findOne({ _id: ObjectId(id) });
             return result;
         }
         catch (err) {
@@ -58,39 +38,21 @@ function getById(id) {
     });
 }
 exports.getById = getById;
-function updatethread(patch) {
+function getByForumId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield client
-                .db("GitGud")
-                .collection("thread")
-                .findOneAndUpdate({ _id: patch._id }, {
-                $set: {
-                    creator: patch.creator,
-                    forumId: patch.forumId,
-                    text: patch.text,
-                },
-            }, { new: true });
-            return result;
+            var result = yield client.db("GitGud").collection("thread").find({ forumId: id }).toArray();
         }
         catch (err) {
             throw err;
         }
     });
 }
-exports.updatethread = updatethread;
+exports.getByForumId = getByForumId;
 function getThreadByUserId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield client
-                .db("GitGud")
-                .collection("thread")
-                .find({ creator: id }, (err, threads) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: threads };
-            });
+            const result = yield client.db("GitGud").collection("thread").find({ creator: id }).toArray();
             return result;
         }
         catch (err) {
@@ -102,16 +64,7 @@ exports.getThreadByUserId = getThreadByUserId;
 function deletethread(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield client
-                .db("GitGud")
-                .collection("thread")
-                .findByIdAndRemove(id)
-                .then((response) => {
-                return response;
-            })
-                .catch((err) => {
-                return err;
-            });
+            var result = yield client.db("GitGud").collection("thread").deleteOne({ _id: ObjectId(id) });
             if (!result) {
                 return { success: false };
             }
@@ -123,21 +76,15 @@ function deletethread(id) {
     });
 }
 exports.deletethread = deletethread;
-function getByForumId(id) {
+function updatethread(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield client
-                .db("GitGud")
-                .collection("thread")
-                .find({ forumId: id }, (err, original) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                if (!original) {
-                    return { success: false, error: `Thread not found` };
-                }
-                return { success: true, data: original };
-            });
+            const result = yield client.db("GitGud").collection("thread").findOneAndUpdate({ _id: ObjectId(patch._id) }, {
+                $set: {
+                    text: patch.text,
+                    update_date: Date.now,
+                },
+            }, { new: true });
             return result;
         }
         catch (err) {
@@ -145,4 +92,4 @@ function getByForumId(id) {
         }
     });
 }
-exports.getByForumId = getByForumId;
+exports.updatethread = updatethread;
