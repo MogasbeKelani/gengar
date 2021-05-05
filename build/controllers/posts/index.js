@@ -52,7 +52,7 @@ function getPostByUserId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("post")
-                .find({ creator: ObjectId(id) })
+                .find({ creator: id })
                 .toArray();
             return result;
         }
@@ -68,7 +68,7 @@ function getPostByThreadId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("post")
-                .find({ threadId: ObjectId(id) })
+                .find({ threadId: id })
                 .toArray();
             return result;
         }

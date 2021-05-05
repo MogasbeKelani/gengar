@@ -12,7 +12,8 @@ const MongoClient = require("mongodb").MongoClient;
  * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
  * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
  */
-const uri = "";
+const uri =
+  "";
 
 const client = new MongoClient(uri);
 

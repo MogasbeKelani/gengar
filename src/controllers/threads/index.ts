@@ -1,24 +1,20 @@
+import { time } from "node:console";
 import { threads } from "../../models/general/models/thread-model";
+var ObjectId = require("mongodb").ObjectID;
 
 export async function createThread(original: threads): Promise<threads | any> {
   try {
     if (!original) {
       return { message: "no body in the request" };
     }
-    const schema = new client.db("GitGud").collection("thread")(original);
+    original.create_date = Date.now();
+    original.update_date = Date.now();
+    const result = await client
+      .db("GitGud")
+      .collection("thread")
+      .insertOne(original);
 
-    var result = await schema.save().then(() => {
-      return {
-        success: true,
-        _id: schema._id,
-        creator: schema.creator,
-        forumId: schema.forumId,
-        title: schema.title,
-        message: "successfuly commented",
-      };
-    });
-
-    return result;
+    return result.ops[0];
   } catch (err) {
     throw err;
   }
@@ -29,55 +25,34 @@ export async function getById(id: String): Promise<threads | any> {
     var result = await client
       .db("GitGud")
       .collection("thread")
-      .findOne({ _id: id }, (err: any, original: threads) => {
-        if (err) {
-          return { success: false, error: err };
-        }
-
-        if (!original) {
-          return { success: false, error: `thread not found` };
-        }
-        return { success: true, data: original };
-      });
+      .findOne({ _id: ObjectId(id) });
     return result;
   } catch (err) {
     throw err;
   }
 }
 
-export async function updatethread(patch: threads): Promise<threads | any> {
-  try {
-    const result = await client
-      .db("GitGud")
-      .collection("thread")
-      .findOneAndUpdate(
-        { _id: patch._id },
-        {
-          $set: {
-            creator: patch.creator,
-            forumId: patch.forumId,
-            text: patch.text,
-          },
-        },
-        { new: true }
-      );
-    return result;
-  } catch (err) {
-    throw err;
-  }
-}
-export async function getThreadByUserId(id: String): Promise<threads | any> {
+export async function getByForumId(id: String): Promise<threads | any> {
   try {
     var result = await client
       .db("GitGud")
       .collection("thread")
-      .find({ creator: id }, (err: any, threads: [threads]) => {
-        if (err) {
-          return { success: false, error: err };
-        }
+      .find({ forumId: id })
+      .toArray();
+    return result;
+  } catch (err) {
+    throw err;
+  }
+}
 
-        return { success: true, data: threads };
-      });
+export async function getThreadByUserId(id: String): Promise<threads | any> {
+  try {
+    const result = await client
+      .db("GitGud")
+      .collection("thread")
+      .find({ creator: id })
+      .toArray();
+
     return result;
   } catch (err) {
     throw err;
@@ -89,14 +64,9 @@ export async function deletethread(id: String): Promise<threads | any> {
     var result = await client
       .db("GitGud")
       .collection("thread")
-      .findByIdAndRemove(id)
-      .then((response: any) => {
-        return response;
-      })
-      .catch((err: any) => {
-        return err;
-      });
-    if (!result) {
+      .deleteOne({ _id: ObjectId(id) });
+
+    if (result.deletedCount == 0) {
       return { success: false };
     }
 
@@ -106,22 +76,25 @@ export async function deletethread(id: String): Promise<threads | any> {
   }
 }
 
-export async function getByForumId(id: String): Promise<threads | any> {
+export async function updatethread(patch: threads): Promise<threads | any> {
   try {
-    var result = await client
+    const result = await client
       .db("GitGud")
       .collection("thread")
-      .find({ forumId: id }, (err: any, original: threads) => {
-        if (err) {
-          return { success: false, error: err };
-        }
+      .findOneAndUpdate(
+        { _id: ObjectId(patch._id) },
+        {
+          $set: {
+            creator: patch.creator,
+            forumId: patch.forumId,
+            text: patch.text,
+            update_date: Date.now,
+          },
+        },
+        { returnOriginal: false }
+      );
 
-        if (!original) {
-          return { success: false, error: `Thread not found` };
-        }
-        return { success: true, data: original };
-      });
-    return result;
+    return result.value;
   } catch (err) {
     throw err;
   }

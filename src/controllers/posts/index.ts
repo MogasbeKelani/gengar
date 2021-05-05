@@ -35,7 +35,7 @@ export async function getPostByUserId(id: String): Promise<post | any> {
     var result = await client
       .db("GitGud")
       .collection("post")
-      .find({ creator: ObjectId(id) })
+      .find({ creator: id })
       .toArray();
     return result;
   } catch (err) {
@@ -48,7 +48,7 @@ export async function getPostByThreadId(id: String): Promise<post | any> {
     var result = await client
       .db("GitGud")
       .collection("post")
-      .find({ threadId: ObjectId(id) })
+      .find({ threadId: id })
       .toArray();
     return result;
   } catch (err) {

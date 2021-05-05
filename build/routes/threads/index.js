@@ -16,6 +16,23 @@ const threads_1 = require("../../controllers/threads");
 const router = express.Router();
 const bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
+router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.body.text) {
+            res.status(400).json({ message: "Missing Params" });
+            return;
+        }
+        var threadFormatted = req.body;
+        if (!req.body.creator) {
+            threadFormatted.creator = req.user._id;
+        }
+        const forum = yield threads_1.createThread(threadFormatted);
+        res.send(forum);
+    }
+    catch (err) {
+        throw err;
+    }
+}));
 router.get("/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.params.id) {
@@ -49,23 +66,6 @@ router.get("/user/:id", jsonParser, (req, res) => __awaiter(void 0, void 0, void
             return;
         }
         const forum = yield threads_1.getThreadByUserId(req.params.id);
-        res.send(forum);
-    }
-    catch (err) {
-        throw err;
-    }
-}));
-router.post("/create", jsonParser, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        if (!req.body.text) {
-            res.status(400).json({ message: "Missing Params" });
-            return;
-        }
-        var threadFormatted = req.body;
-        if (!req.body.creator) {
-            threadFormatted.creator = req.user._id;
-        }
-        const forum = yield threads_1.createThread(threadFormatted);
         res.send(forum);
     }
     catch (err) {
