@@ -50,9 +50,14 @@ export async function getThreadByUserId(id: String): Promise<threads | any> {
     const result = await client
       .db("GitGud")
       .collection("thread")
+<<<<<<< HEAD
       .find({ creator: id })
       .toArray();
 
+=======
+      .find({ creator: ObjectId(id) })
+      .toArray();
+>>>>>>> 5df5fda9f75fd219991f6dbdaae8c4bce1553484
     return result;
   } catch (err) {
     throw err;

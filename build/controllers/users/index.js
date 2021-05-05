@@ -9,22 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.removeUserAttribute = exports.updateUserAttribute = exports.getUserById = void 0;
+exports.deleteUser = exports.updateUserAttribute = exports.getUserById = void 0;
+var ObjectId = require("mongodb").ObjectID;
 function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             var result = yield client
                 .db("GitGud")
                 .collection("user")
-                .findOne({ _id: id }, (err, userInfo) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                if (!userInfo) {
-                    return { success: false, error: `User not found` };
-                }
-                return { success: true, data: userInfo };
-            });
+                .findOne({ _id: ObjectId(id) });
             return result;
         }
         catch (err) {
@@ -39,15 +32,16 @@ function updateUserAttribute(patch) {
             const result = yield client
                 .db("GitGud")
                 .collection("user")
-                .findOneAndUpdate({ _id: patch._id }, {
+                .findOneAndUpdate({ _id: ObjectId(patch._id) }, {
                 $set: {
                     google_id: patch.google_id,
                     first_name: patch.first_name,
                     last_name: patch.last_name,
                     image: patch.image,
+                    update_date: Date.now(),
                 },
-            }, { new: true });
-            return result;
+            }, { returnOriginal: false });
+            return result.value;
         }
         catch (err) {
             throw err;
@@ -55,42 +49,14 @@ function updateUserAttribute(patch) {
     });
 }
 exports.updateUserAttribute = updateUserAttribute;
-function removeUserAttribute(patch) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const result = yield client
-                .db("GitGud")
-                .collection("user")
-                .findOneAndUpdate({ _id: patch._id }, {
-                $set: {
-                    google_id: patch.google_id,
-                    first_name: patch.first_name,
-                    last_name: patch.last_name,
-                    image: patch.image,
-                },
-            }, { new: true });
-            return result;
-        }
-        catch (err) {
-            throw err;
-        }
-    });
-}
-exports.removeUserAttribute = removeUserAttribute;
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             var result = yield client
                 .db("GitGud")
                 .collection("user")
-                .findByIdAndRemove(id)
-                .then((response) => {
-                return response;
-            })
-                .catch((err) => {
-                return err;
-            });
-            if (!result) {
+                .deleteOne({ _id: ObjectId(id) });
+            if (result.deletedCount == 0) {
                 return { success: false };
             }
             return { success: true };

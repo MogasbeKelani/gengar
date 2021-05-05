@@ -24,6 +24,8 @@ module.exports = function (passport) {
                 first_name: profile.name.givenName,
                 last_name: profile.name.familyName,
                 image: profile.photos[0].value,
+                create_date: Date.now(),
+                update_date: Date.now(),
             };
             try {
                 let user = yield client
