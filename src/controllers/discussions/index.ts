@@ -7,10 +7,14 @@ export async function createDiscussion(
     if (!forum) {
       return { message: "no body in the request" };
     }
-    console.log(forum);
-    const result = client.db("GitGud").collection("forum").insertOne(forum);
+    forum.create_date = Date.now();
+    forum.update_date = Date.now();
+    const result = await client
+      .db("GitGud")
+      .collection("forum")
+      .insertOne(forum);
 
-    return result;
+    return result.ops[0];
   } catch (err) {
     throw err;
   }
@@ -71,7 +75,7 @@ export async function getDiscussionByUserId(
     var result = await client
       .db("GitGud")
       .collection("forum")
-      .find({ creator: ObjectId(id) })
+      .find({ creator: id })
       .toArray();
     return result;
   } catch (err) {
@@ -85,14 +89,20 @@ export async function updateDiscussion(
     const result = await client
       .db("GitGud")
       .collection("forum")
-      .updateOne(
+      .findOneAndUpdate(
         { _id: ObjectId(patch._id) },
         {
-          $set: { title: patch.title },
-        }
+          $set: {
+            title: patch.title,
+            description: patch.description,
+            update_date: Date.now(),
+            topics: patch.topics,
+          },
+        },
+        { returnOriginal: false }
       );
 
-    return result;
+    return result.value;
   } catch (err) {
     throw err;
   }
@@ -103,11 +113,10 @@ export async function deleteDiscussion(id: String): Promise<discussion | any> {
     var result = await client
       .db("GitGud")
       .collection("forum")
-      .findByIdAndRemove(id);
-    if (!result) {
+      .deleteOne({ _id: ObjectId(id) });
+    if (result.deletedCount == 0) {
       return { success: false };
     }
-
     return { success: true };
   } catch (err) {
     throw err;

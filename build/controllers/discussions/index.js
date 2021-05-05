@@ -17,9 +17,13 @@ function createDiscussion(forum) {
             if (!forum) {
                 return { message: "no body in the request" };
             }
-            console.log(forum);
-            const result = client.db("GitGud").collection("forum").insertOne(forum);
-            return result;
+            forum.create_date = Date.now();
+            forum.update_date = Date.now();
+            const result = yield client
+                .db("GitGud")
+                .collection("forum")
+                .insertOne(forum);
+            return result.ops[0];
         }
         catch (err) {
             throw err;
@@ -92,7 +96,7 @@ function getDiscussionByUserId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("forum")
-                .find({ creator: ObjectId(id) })
+                .find({ creator: id })
                 .toArray();
             return result;
         }
@@ -108,10 +112,15 @@ function updateDiscussion(patch) {
             const result = yield client
                 .db("GitGud")
                 .collection("forum")
-                .updateOne({ _id: ObjectId(patch._id) }, {
-                $set: { title: patch.title },
-            });
-            return result;
+                .findOneAndUpdate({ _id: ObjectId(patch._id) }, {
+                $set: {
+                    title: patch.title,
+                    description: patch.description,
+                    update_date: Date.now(),
+                    topics: patch.topics,
+                },
+            }, { returnOriginal: false });
+            return result.value;
         }
         catch (err) {
             throw err;
@@ -125,8 +134,8 @@ function deleteDiscussion(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("forum")
-                .findByIdAndRemove(id);
-            if (!result) {
+                .deleteOne({ _id: ObjectId(id) });
+            if (result.deletedCount == 0) {
                 return { success: false };
             }
             return { success: true };
