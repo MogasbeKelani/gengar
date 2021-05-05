@@ -13,7 +13,7 @@ const MongoClient = require("mongodb").MongoClient;
  * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
  */
 const uri =
-  "mongodb+srv://calvinIsAG:02JPeKOT5dJGRQxR@clustergit.nzf4d.mongodb.net/GitGud?retryWrites=true&w=majority";
+  "";
 
 const client = new MongoClient(uri);
 
