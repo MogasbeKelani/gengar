@@ -12,8 +12,7 @@ const MongoClient = require("mongodb").MongoClient;
  * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
  * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
  */
-const uri =
-  "mongodb+srv://calvinIsAG:02JPeKOT5dJGRQxR@clustergit.nzf4d.mongodb.net/GitGud?retryWrites=true&w=majority";
+const uri = "";
 
 const client = new MongoClient(uri);
 
@@ -23,7 +22,7 @@ async function main(client) {
     await client.connect();
     databasesList = await client.db().admin().listDatabases();
 
-    console.log("Databases:");
+    console.log("Successfully connected Databases: ");
     databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
   } catch (e) {
     console.error(e);

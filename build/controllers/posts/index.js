@@ -10,25 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePost = exports.updatePost = exports.getPostByThreadId = exports.getPostByUserId = exports.getPostById = exports.createPost = void 0;
+var ObjectId = require("mongodb").ObjectID;
 function createPost(forum) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (!forum) {
                 return { message: "no body in the request" };
             }
-            const schema = new client.db("GitGud").collection("post")(forum);
-            var result = yield schema.save().then(() => {
-                return {
-                    success: true,
-                    _id: schema._id,
-                    creator: schema.creator,
-                    message: "post created!",
-                    text: schema.text,
-                    time: schema.time,
-                    threadId: schema.threadId,
-                };
-            });
-            return result;
+            forum.create_date = Date.now();
+            forum.update_date = Date.now();
+            const result = yield client
+                .db("GitGud")
+                .collection("post")
+                .insertOne(forum);
+            return result.ops[0];
         }
         catch (err) {
             throw err;
@@ -42,15 +37,7 @@ function getPostById(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("post")
-                .findOne({ _id: id }, (err, post) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                if (!post) {
-                    return { success: false, error: `post not found` };
-                }
-                return { success: true, data: post };
-            });
+                .findOne({ _id: ObjectId(id) });
             return result;
         }
         catch (err) {
@@ -65,12 +52,8 @@ function getPostByUserId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("post")
-                .find({ creator: id }, (err, posts) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: posts };
-            });
+                .find({ creator: ObjectId(id) })
+                .toArray();
             return result;
         }
         catch (err) {
@@ -85,12 +68,8 @@ function getPostByThreadId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("post")
-                .find({ threadId: id }, (err, post) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: post };
-            });
+                .find({ threadId: ObjectId(id) })
+                .toArray();
             return result;
         }
         catch (err) {
@@ -105,12 +84,15 @@ function updatePost(patch) {
             const result = yield client
                 .db("GitGud")
                 .collection("post")
-                .findOneAndUpdate({ _id: patch._id }, {
+                .findOneAndUpdate({ _id: ObjectId(patch._id) }, {
                 $set: {
+                    creator: patch.creator,
+                    threadId: patch.threadId,
                     text: patch.text,
+                    update_date: Date.now(),
                 },
-            }, { new: true });
-            return result;
+            }, { returnOriginal: false });
+            return result.value;
         }
         catch (err) {
             throw err;
@@ -124,14 +106,9 @@ function deletePost(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("post")
-                .findByIdAndRemove(id)
-                .then((response) => {
-                return response;
-            })
-                .catch((err) => {
-                return err;
-            });
-            if (!result) {
+                .deleteOne({ _id: ObjectId(id) });
+            console.log(result);
+            if (result.deletedCount == 0) {
                 return { success: false };
             }
             return { success: true };

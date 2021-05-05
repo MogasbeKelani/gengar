@@ -1,25 +1,18 @@
 import { post } from "../../models/general/models/post-model";
-
+var ObjectId = require("mongodb").ObjectID;
 export async function createPost(forum: post): Promise<post | any> {
   try {
     if (!forum) {
       return { message: "no body in the request" };
     }
-    const schema = new client.db("GitGud").collection("post")(forum);
+    forum.create_date = Date.now();
+    forum.update_date = Date.now();
 
-    var result = await schema.save().then(() => {
-      return {
-        success: true,
-        _id: schema._id,
-        creator: schema.creator,
-        message: "post created!",
-        text: schema.text,
-        time: schema.time,
-        threadId: schema.threadId,
-      };
-    });
-
-    return result;
+    const result = await client
+      .db("GitGud")
+      .collection("post")
+      .insertOne(forum);
+    return result.ops[0];
   } catch (err) {
     throw err;
   }
@@ -30,16 +23,7 @@ export async function getPostById(id: String): Promise<post | any> {
     var result = await client
       .db("GitGud")
       .collection("post")
-      .findOne({ _id: id }, (err: any, post: post) => {
-        if (err) {
-          return { success: false, error: err };
-        }
-
-        if (!post) {
-          return { success: false, error: `post not found` };
-        }
-        return { success: true, data: post };
-      });
+      .findOne({ _id: ObjectId(id) });
     return result;
   } catch (err) {
     throw err;
@@ -51,13 +35,8 @@ export async function getPostByUserId(id: String): Promise<post | any> {
     var result = await client
       .db("GitGud")
       .collection("post")
-      .find({ creator: id }, (err: any, posts: [post]) => {
-        if (err) {
-          return { success: false, error: err };
-        }
-
-        return { success: true, data: posts };
-      });
+      .find({ creator: ObjectId(id) })
+      .toArray();
     return result;
   } catch (err) {
     throw err;
@@ -69,13 +48,8 @@ export async function getPostByThreadId(id: String): Promise<post | any> {
     var result = await client
       .db("GitGud")
       .collection("post")
-      .find({ threadId: id }, (err: any, post: post) => {
-        if (err) {
-          return { success: false, error: err };
-        }
-
-        return { success: true, data: post };
-      });
+      .find({ threadId: ObjectId(id) })
+      .toArray();
     return result;
   } catch (err) {
     throw err;
@@ -88,15 +62,19 @@ export async function updatePost(patch: post): Promise<post | any> {
       .db("GitGud")
       .collection("post")
       .findOneAndUpdate(
-        { _id: patch._id },
+        { _id: ObjectId(patch._id) },
         {
           $set: {
+            creator: patch.creator,
+            threadId: patch.threadId,
             text: patch.text,
+            update_date: Date.now(),
           },
         },
-        { new: true }
+        { returnOriginal: false }
       );
-    return result;
+
+    return result.value;
   } catch (err) {
     throw err;
   }
@@ -107,14 +85,9 @@ export async function deletePost(id: String): Promise<post | any> {
     var result = await client
       .db("GitGud")
       .collection("post")
-      .findByIdAndRemove(id)
-      .then((response: any) => {
-        return response;
-      })
-      .catch((err: any) => {
-        return err;
-      });
-    if (!result) {
+      .deleteOne({ _id: ObjectId(id) });
+    console.log(result);
+    if (result.deletedCount == 0) {
       return { success: false };
     }
 
