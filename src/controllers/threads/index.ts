@@ -32,6 +32,7 @@ export async function getById(id: String): Promise<threads | any> {
 export async function getByForumId(id: String): Promise<threads | any> {
   try {
     var result = await client.db("GitGud").collection("thread").find({ forumId: id }).toArray();
+    return result;
   } catch (err) {
     throw err;
   }
