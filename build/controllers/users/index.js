@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.removeUserAttribute = exports.updateUserAttribute = exports.getUserById = void 0;
+exports.deleteUser = exports.updateUserAttribute = exports.getUserById = void 0;
 var ObjectId = require("mongodb").ObjectID;
 function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -38,9 +38,10 @@ function updateUserAttribute(patch) {
                     first_name: patch.first_name,
                     last_name: patch.last_name,
                     image: patch.image,
+                    update_date: Date.now(),
                 },
-            }, { new: true });
-            return result;
+            }, { returnOriginal: false });
+            return result.value;
         }
         catch (err) {
             throw err;
@@ -48,28 +49,6 @@ function updateUserAttribute(patch) {
     });
 }
 exports.updateUserAttribute = updateUserAttribute;
-function removeUserAttribute(patch) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const result = yield client
-                .db("GitGud")
-                .collection("user")
-                .findOneAndUpdate({ _id: ObjectId(patch._id) }, {
-                $set: {
-                    google_id: patch.google_id,
-                    first_name: patch.first_name,
-                    last_name: patch.last_name,
-                    image: patch.image,
-                },
-            }, { new: true });
-            return result;
-        }
-        catch (err) {
-            throw err;
-        }
-    });
-}
-exports.removeUserAttribute = removeUserAttribute;
 function deleteUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -77,7 +56,7 @@ function deleteUser(id) {
                 .db("GitGud")
                 .collection("user")
                 .deleteOne({ _id: ObjectId(id) });
-            if (!result) {
+            if (result.deletedCount == 0) {
                 return { success: false };
             }
             return { success: true };

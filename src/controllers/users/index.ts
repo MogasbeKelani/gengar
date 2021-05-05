@@ -26,33 +26,12 @@ export async function updateUserAttribute(patch: user): Promise<user | any> {
             first_name: patch.first_name,
             last_name: patch.last_name,
             image: patch.image,
+            update_date: Date.now(),
           },
         },
-        { new: true }
+        { returnOriginal: false }
       );
-    return result;
-  } catch (err) {
-    throw err;
-  }
-}
-export async function removeUserAttribute(patch: user): Promise<user | any> {
-  try {
-    const result = await client
-      .db("GitGud")
-      .collection("user")
-      .findOneAndUpdate(
-        { _id: ObjectId(patch._id) },
-        {
-          $set: {
-            google_id: patch.google_id,
-            first_name: patch.first_name,
-            last_name: patch.last_name,
-            image: patch.image,
-          },
-        },
-        { new: true }
-      );
-    return result;
+    return result.value;
   } catch (err) {
     throw err;
   }
@@ -64,10 +43,9 @@ export async function deleteUser(id: String): Promise<user | any> {
       .db("GitGud")
       .collection("user")
       .deleteOne({ _id: ObjectId(id) });
-    if (!result) {
+    if (result.deletedCount == 0) {
       return { success: false };
     }
-
     return { success: true };
   } catch (err) {
     throw err;
