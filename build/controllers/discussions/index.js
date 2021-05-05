@@ -104,18 +104,12 @@ exports.getDiscussionByUserId = getDiscussionByUserId;
 function updateDiscussion(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log(patch);
             const result = yield client
                 .db("GitGud")
                 .collection("forum")
-                .findOneAndUpdate({ _id: patch._id }, {
-                $set: {
-                    creator: patch.creator,
-                    title: patch.title,
-                    description: patch.description,
-                    topics: patch.topics,
-                },
-            }, { new: true });
+                .updateOne({ _id: ObjectId(patch._id) }, {
+                $set: { title: patch.title },
+            });
             return result;
         }
         catch (err) {

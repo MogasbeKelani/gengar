@@ -81,22 +81,16 @@ export async function updateDiscussion(
   patch: discussion
 ): Promise<discussion | any> {
   try {
-    console.log(patch);
     const result = await client
       .db("GitGud")
       .collection("forum")
-      .findOneAndUpdate(
-        { _id: patch._id },
+      .updateOne(
+        { _id: ObjectId(patch._id) },
         {
-          $set: {
-            creator: patch.creator,
-            title: patch.title,
-            description: patch.description,
-            topics: patch.topics,
-          },
-        },
-        { new: true }
+          $set: { title: patch.title },
+        }
       );
+
     return result;
   } catch (err) {
     throw err;
