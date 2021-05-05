@@ -10,21 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.removeUserAttribute = exports.updateUserAttribute = exports.getUserById = void 0;
+var ObjectId = require("mongodb").ObjectID;
 function getUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             var result = yield client
                 .db("GitGud")
                 .collection("user")
-                .findOne({ _id: id }, (err, userInfo) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                if (!userInfo) {
-                    return { success: false, error: `User not found` };
-                }
-                return { success: true, data: userInfo };
-            });
+                .findOne({ _id: ObjectId(id) });
             return result;
         }
         catch (err) {
@@ -39,7 +32,7 @@ function updateUserAttribute(patch) {
             const result = yield client
                 .db("GitGud")
                 .collection("user")
-                .findOneAndUpdate({ _id: patch._id }, {
+                .findOneAndUpdate({ _id: ObjectId(patch._id) }, {
                 $set: {
                     google_id: patch.google_id,
                     first_name: patch.first_name,
@@ -61,7 +54,7 @@ function removeUserAttribute(patch) {
             const result = yield client
                 .db("GitGud")
                 .collection("user")
-                .findOneAndUpdate({ _id: patch._id }, {
+                .findOneAndUpdate({ _id: ObjectId(patch._id) }, {
                 $set: {
                     google_id: patch.google_id,
                     first_name: patch.first_name,
@@ -83,13 +76,7 @@ function deleteUser(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("user")
-                .findByIdAndRemove(id)
-                .then((response) => {
-                return response;
-            })
-                .catch((err) => {
-                return err;
-            });
+                .deleteOne({ _id: ObjectId(id) });
             if (!result) {
                 return { success: false };
             }
