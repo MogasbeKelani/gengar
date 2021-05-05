@@ -15,45 +15,6 @@ const router = express.Router();
 const bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
 
-router.get("/:id", jsonParser, async (req: any, res: any) => {
-  try {
-    if (!req.params.id) {
-      res.status(400).json({ message: "Missing Params" });
-      return;
-    }
-    const forum = await getById(req.params.id);
-
-    res.send(forum);
-  } catch (err) {
-    throw err;
-  }
-});
-router.get("/forum/:id", jsonParser, async (req: any, res: any) => {
-  try {
-    if (!req.params.id) {
-      res.status(400).json({ message: "Missing Params" });
-      return;
-    }
-    const forum = await getByForumId(req.params.id);
-
-    res.send(forum);
-  } catch (err) {
-    throw err;
-  }
-});
-router.get("/user/:id", jsonParser, async (req: any, res: any) => {
-  try {
-    if (!req.params.id) {
-      res.status(400).json({ message: "Missing Params" });
-      return;
-    }
-    const forum = await getThreadByUserId(req.params.id);
-
-    res.send(forum);
-  } catch (err) {
-    throw err;
-  }
-});
 
 router.post("/create", jsonParser, async (req: any, res: any) => {
   try {
@@ -73,6 +34,49 @@ router.post("/create", jsonParser, async (req: any, res: any) => {
     throw err;
   }
 });
+
+router.get("/:id", jsonParser, async (req: any, res: any) => {
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const forum = await getById(req.params.id);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+router.get("/forum/:id", jsonParser, async (req: any, res: any) => {
+
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const forum = await getByForumId(req.params.id);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+router.get("/user/:id", jsonParser, async (req: any, res: any) => {
+
+  try {
+    if (!req.params.id) {
+      res.status(400).json({ message: "Missing Params" });
+      return;
+    }
+    const forum = await getThreadByUserId(req.params.id);
+
+    res.send(forum);
+  } catch (err) {
+    throw err;
+  }
+});
+
 
 router.delete("/delete/:id", jsonParser, async (req: any, res: any) => {
   try {
