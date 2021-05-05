@@ -92,7 +92,8 @@ function getDiscussionByUserId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("forum")
-                .find({ creator: ObjectId(id) });
+                .find({ creator: ObjectId(id) })
+                .toArray();
             return result;
         }
         catch (err) {

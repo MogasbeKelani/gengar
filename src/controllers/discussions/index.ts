@@ -71,7 +71,8 @@ export async function getDiscussionByUserId(
     var result = await client
       .db("GitGud")
       .collection("forum")
-      .find({ creator: ObjectId(id) });
+      .find({ creator: ObjectId(id) })
+      .toArray();
     return result;
   } catch (err) {
     throw err;
