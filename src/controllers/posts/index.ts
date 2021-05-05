@@ -1,4 +1,5 @@
 import { post } from "../../models/general/models/post-model";
+var ObjectId = require("mongodb").ObjectID;
 
 export async function createPost(forum: post): Promise<post | any> {
   try {
@@ -51,13 +52,8 @@ export async function getPostByUserId(id: String): Promise<post | any> {
     var result = await client
       .db("GitGud")
       .collection("post")
-      .find({ creator: id }, (err: any, posts: [post]) => {
-        if (err) {
-          return { success: false, error: err };
-        }
-
-        return { success: true, data: posts };
-      });
+      .find({ creator: ObjectId(id) })
+      .toArray();
     return result;
   } catch (err) {
     throw err;
@@ -69,13 +65,8 @@ export async function getPostByThreadId(id: String): Promise<post | any> {
     var result = await client
       .db("GitGud")
       .collection("post")
-      .find({ threadId: id }, (err: any, post: post) => {
-        if (err) {
-          return { success: false, error: err };
-        }
-
-        return { success: true, data: post };
-      });
+      .find({ threadId: id })
+      .toArray();
     return result;
   } catch (err) {
     throw err;

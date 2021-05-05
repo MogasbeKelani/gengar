@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getByForumId = exports.deletethread = exports.getThreadByUserId = exports.updatethread = exports.getById = exports.createThread = void 0;
+var ObjectId = require("mongodb").ObjectID;
 function createThread(original) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -85,12 +86,8 @@ function getThreadByUserId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("thread")
-                .find({ creator: id }, (err, threads) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: threads };
-            });
+                .find({ creator: ObjectId(id) })
+                .toArray();
             return result;
         }
         catch (err) {

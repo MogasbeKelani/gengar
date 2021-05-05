@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePost = exports.updatePost = exports.getPostByThreadId = exports.getPostByUserId = exports.getPostById = exports.createPost = void 0;
+var ObjectId = require("mongodb").ObjectID;
 function createPost(forum) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -65,12 +66,8 @@ function getPostByUserId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("post")
-                .find({ creator: id }, (err, posts) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: posts };
-            });
+                .find({ creator: ObjectId(id) })
+                .toArray();
             return result;
         }
         catch (err) {
@@ -85,12 +82,8 @@ function getPostByThreadId(id) {
             var result = yield client
                 .db("GitGud")
                 .collection("post")
-                .find({ threadId: id }, (err, post) => {
-                if (err) {
-                    return { success: false, error: err };
-                }
-                return { success: true, data: post };
-            });
+                .find({ threadId: id })
+                .toArray();
             return result;
         }
         catch (err) {

@@ -1,4 +1,5 @@
 import { threads } from "../../models/general/models/thread-model";
+var ObjectId = require("mongodb").ObjectID;
 
 export async function createThread(original: threads): Promise<threads | any> {
   try {
@@ -71,13 +72,8 @@ export async function getThreadByUserId(id: String): Promise<threads | any> {
     var result = await client
       .db("GitGud")
       .collection("thread")
-      .find({ creator: id }, (err: any, threads: [threads]) => {
-        if (err) {
-          return { success: false, error: err };
-        }
-
-        return { success: true, data: threads };
-      });
+      .find({ creator: ObjectId(id) })
+      .toArray();
     return result;
   } catch (err) {
     throw err;
