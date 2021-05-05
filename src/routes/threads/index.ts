@@ -57,12 +57,8 @@ router.get("/user/:id", jsonParser, async (req: any, res: any) => {
 
 router.post("/create", jsonParser, async (req: any, res: any) => {
   try {
-    if (!req.body.title) {
+    if (!req.body.text) {
       res.status(400).json({ message: "Missing Params" });
-      return;
-    }
-    if ((!req.user || !req.user._id) && !req.body.creator) {
-      res.status(400).json({ message: "User has not signed In" });
       return;
     }
     var threadFormatted = req.body;

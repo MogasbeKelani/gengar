@@ -1,7 +1,3 @@
-import mongoose = require("mongoose");
-import { UserModelFunctions } from "../../models/general/models/user-model-functions";
-const User: UserModelFunctions = require("../../models/general/models/user-model");
-
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
 const GOOGLE_CLIENT_SECRET = configs.googleSSO.secret;
 let GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -30,12 +26,20 @@ module.exports = function (passport: any) {
         };
 
         try {
-          let user = await User.findOne({ google_id: profile.id });
+          let user = await client
+            .db("GitGud")
+            .collection("user")
+            .findOne({ google_id: profile.id });
+          console.log(user);
           //user exist in the db
           if (user) {
             cb(null, user);
           } else {
-            user = await User.create(newUser);
+            user = await client
+              .db("GitGud")
+              .collection("user")
+              .insertOne(newUser);
+            console.log(user);
             cb(null, user);
           }
         } catch (err) {
@@ -46,12 +50,10 @@ module.exports = function (passport: any) {
   );
 
   passport.serializeUser(function (user: any, done: any) {
-    done(null, user.id);
+    done(null, user);
   });
 
-  passport.deserializeUser(function (id: any, done: any) {
-    User.findById(id, function (err: any, user: any) {
-      done(err, user);
-    });
+  passport.deserializeUser(function (user: any, done: any) {
+    done(null, user);
   });
 };

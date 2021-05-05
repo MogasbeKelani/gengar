@@ -4,4 +4,6 @@ export interface post {
   threadId: String;
   text: String;
   time: String;
+  create_date: Number;
+  update_date: Number;
 }

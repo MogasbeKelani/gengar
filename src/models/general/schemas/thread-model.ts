@@ -3,9 +3,10 @@ const Schema = mongoose.Schema;
 
 const Thread = new Schema(
   {
-    creator: { type: String, ref: "user", required: true },
+    creator: { type: String, ref: "user", required: true }, //userID
     forumId: { type: String, ref: "forum", required: true },
-    title: { type: String, required: true },
+    text: { type: String, required: true },
+    time: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );

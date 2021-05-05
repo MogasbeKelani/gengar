@@ -4,7 +4,4 @@ export interface user {
   first_name?: String;
   last_name?: String;
   image?: String;
-  threadsCreated?: [String];
-  forumsCreated?: [String];
-  postsMade?: [String];
 }

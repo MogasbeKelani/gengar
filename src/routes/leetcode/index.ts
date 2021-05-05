@@ -30,11 +30,9 @@ router.get("/questions/:name", async (req: any, res: any) => {
   }
 });
 
-router.get("/questions/:topics", async (req: any, res: any) => {
+router.get("/questions/topic/:topic", async (req: any, res: any) => {
   try {
-    const allProblems = await leetcode.singleQuestion({
-      questionTitleSlug: req.params.name,
-    });
+    const allProblems = await leetcode.allQuestionsTopic(req.params.topic);
     res.send({
       allProblems,
     });

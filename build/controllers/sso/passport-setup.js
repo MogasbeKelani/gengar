@@ -8,8 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const User = require("../../models/general/models/user-model");
 const GOOGLE_CLIENT_ID = configs.googleSSO.id;
 const GOOGLE_CLIENT_SECRET = configs.googleSSO.secret;
 let GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -28,13 +26,21 @@ module.exports = function (passport) {
                 image: profile.photos[0].value,
             };
             try {
-                let user = yield User.findOne({ google_id: profile.id });
+                let user = yield client
+                    .db("GitGud")
+                    .collection("user")
+                    .findOne({ google_id: profile.id });
+                console.log(user);
                 //user exist in the db
                 if (user) {
                     cb(null, user);
                 }
                 else {
-                    user = yield User.create(newUser);
+                    user = yield client
+                        .db("GitGud")
+                        .collection("user")
+                        .insertOne(newUser);
+                    console.log(user);
                     cb(null, user);
                 }
             }
@@ -44,11 +50,9 @@ module.exports = function (passport) {
         });
     }));
     passport.serializeUser(function (user, done) {
-        done(null, user.id);
+        done(null, user);
     });
-    passport.deserializeUser(function (id, done) {
-        User.findById(id, function (err, user) {
-            done(err, user);
-        });
+    passport.deserializeUser(function (user, done) {
+        done(null, user);
     });
 };

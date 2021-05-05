@@ -37,11 +37,9 @@ router.get("/questions/:name", (req, res) => __awaiter(void 0, void 0, void 0, f
         throw err;
     }
 }));
-router.get("/questions/:topics", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/questions/topic/:topic", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const allProblems = yield leetcode.singleQuestion({
-            questionTitleSlug: req.params.name,
-        });
+        const allProblems = yield leetcode.allQuestionsTopic(req.params.topic);
         res.send({
             allProblems,
         });

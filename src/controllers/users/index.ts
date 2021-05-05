@@ -1,12 +1,11 @@
-const userSchema = require("../../models/general/schemas/user-model");
-
 import { user } from "../../models/general/models/user-model";
 
 export async function getUserById(id: String): Promise<user | any> {
   try {
-    var result = await userSchema.findOne(
-      { _id: id },
-      (err: any, userInfo: user) => {
+    var result = await client
+      .db("GitGud")
+      .collection("user")
+      .findOne({ _id: id }, (err: any, userInfo: user) => {
         if (err) {
           return { success: false, error: err };
         }
@@ -15,8 +14,7 @@ export async function getUserById(id: String): Promise<user | any> {
           return { success: false, error: `User not found` };
         }
         return { success: true, data: userInfo };
-      }
-    );
+      });
     return result;
   } catch (err) {
     throw err;
@@ -25,18 +23,21 @@ export async function getUserById(id: String): Promise<user | any> {
 
 export async function updateUserAttribute(patch: user): Promise<user | any> {
   try {
-    const result = await userSchema.findOneAndUpdate(
-      { _id: patch._id },
-      {
-        $set: {
-          google_id: patch.google_id,
-          first_name: patch.first_name,
-          last_name: patch.last_name,
-          image: patch.image,
+    const result = await client
+      .db("GitGud")
+      .collection("user")
+      .findOneAndUpdate(
+        { _id: patch._id },
+        {
+          $set: {
+            google_id: patch.google_id,
+            first_name: patch.first_name,
+            last_name: patch.last_name,
+            image: patch.image,
+          },
         },
-      },
-      { new: true }
-    );
+        { new: true }
+      );
     return result;
   } catch (err) {
     throw err;
@@ -44,18 +45,21 @@ export async function updateUserAttribute(patch: user): Promise<user | any> {
 }
 export async function removeUserAttribute(patch: user): Promise<user | any> {
   try {
-    const result = await userSchema.findOneAndUpdate(
-      { _id: patch._id },
-      {
-        $set: {
-          google_id: patch.google_id,
-          first_name: patch.first_name,
-          last_name: patch.last_name,
-          image: patch.image,
+    const result = await client
+      .db("GitGud")
+      .collection("user")
+      .findOneAndUpdate(
+        { _id: patch._id },
+        {
+          $set: {
+            google_id: patch.google_id,
+            first_name: patch.first_name,
+            last_name: patch.last_name,
+            image: patch.image,
+          },
         },
-      },
-      { new: true }
-    );
+        { new: true }
+      );
     return result;
   } catch (err) {
     throw err;
@@ -64,7 +68,9 @@ export async function removeUserAttribute(patch: user): Promise<user | any> {
 
 export async function deleteUser(id: String): Promise<user | any> {
   try {
-    var result = await userSchema
+    var result = await client
+      .db("GitGud")
+      .collection("user")
       .findByIdAndRemove(id)
       .then((response: any) => {
         return response;

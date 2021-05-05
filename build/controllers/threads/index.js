@@ -10,14 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getByForumId = exports.deletethread = exports.getThreadByUserId = exports.updatethread = exports.getById = exports.createThread = void 0;
-const threadSchema = require("../../models/general/schemas/thread-model");
 function createThread(original) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (!original) {
                 return { message: "no body in the request" };
             }
-            const schema = new threadSchema(original);
+            const schema = new client.db("GitGud").collection("thread")(original);
             var result = yield schema.save().then(() => {
                 return {
                     success: true,
@@ -39,7 +38,10 @@ exports.createThread = createThread;
 function getById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield threadSchema.findOne({ _id: id }, (err, original) => {
+            var result = yield client
+                .db("GitGud")
+                .collection("thread")
+                .findOne({ _id: id }, (err, original) => {
                 if (err) {
                     return { success: false, error: err };
                 }
@@ -59,11 +61,14 @@ exports.getById = getById;
 function updatethread(patch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield threadSchema.findOneAndUpdate({ _id: patch._id }, {
+            const result = yield client
+                .db("GitGud")
+                .collection("thread")
+                .findOneAndUpdate({ _id: patch._id }, {
                 $set: {
                     creator: patch.creator,
                     forumId: patch.forumId,
-                    title: patch.title,
+                    text: patch.text,
                 },
             }, { new: true });
             return result;
@@ -77,7 +82,10 @@ exports.updatethread = updatethread;
 function getThreadByUserId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield threadSchema.find({ creator: id }, (err, threads) => {
+            var result = yield client
+                .db("GitGud")
+                .collection("thread")
+                .find({ creator: id }, (err, threads) => {
                 if (err) {
                     return { success: false, error: err };
                 }
@@ -94,7 +102,9 @@ exports.getThreadByUserId = getThreadByUserId;
 function deletethread(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield threadSchema
+            var result = yield client
+                .db("GitGud")
+                .collection("thread")
                 .findByIdAndRemove(id)
                 .then((response) => {
                 return response;
@@ -116,7 +126,10 @@ exports.deletethread = deletethread;
 function getByForumId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var result = yield threadSchema.find({ forumId: id }, (err, original) => {
+            var result = yield client
+                .db("GitGud")
+                .collection("thread")
+                .find({ forumId: id }, (err, original) => {
                 if (err) {
                     return { success: false, error: err };
                 }
