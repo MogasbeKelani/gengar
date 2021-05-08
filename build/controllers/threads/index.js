@@ -65,11 +65,7 @@ exports.getByForumId = getByForumId;
 function getThreadByUserId(id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const result = yield client
-                .db("GitGud")
-                .collection("thread")
-                .find({ creator: id })
-                .toArray();
+            const result = yield client.db("GitGud").collection("thread");
             return result;
         }
         catch (err) {
