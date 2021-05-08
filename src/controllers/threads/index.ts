@@ -16,6 +16,7 @@ export async function createThread(original: threads): Promise<threads | any> {
         creator: schema.creator,
         forumId: schema.forumId,
         title: schema.title,
+        creatorName: schema.creatorName,
         message: "successfuly commented",
       };
     });
@@ -56,6 +57,7 @@ export async function updatethread(patch: threads): Promise<threads | any> {
           creator: patch.creator,
           forumId: patch.forumId,
           text: patch.text,
+          creatorName: patch.creatorName,
         },
       },
       { new: true }

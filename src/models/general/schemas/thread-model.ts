@@ -7,6 +7,7 @@ const Thread = new Schema(
     forumId: { type: String, ref: "forum", required: true },
     text: { type: String, required: true },
     time: { type: Date, default: Date.now },
+    creatorName: { type: String, ref: "user", required: true }, //userName
   },
   { timestamps: true }
 );

@@ -4,4 +4,5 @@ export interface post {
   threadId: String;
   text: String;
   time: String;
+  creatorName?: String;
 }

@@ -27,6 +27,7 @@ function createPost(forum) {
                     text: schema.text,
                     time: schema.time,
                     threadId: schema.threadId,
+                    creatorName: schema.creatorName,
                 };
             });
             return result;
@@ -97,6 +98,7 @@ function updatePost(patch) {
             const result = yield postSchema.findOneAndUpdate({ _id: patch._id }, {
                 $set: {
                     text: patch.text,
+                    creatorName: patch.creatorName,
                 },
             }, { new: true });
             return result;

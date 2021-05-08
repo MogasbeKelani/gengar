@@ -25,6 +25,7 @@ function createThread(original) {
                     creator: schema.creator,
                     forumId: schema.forumId,
                     title: schema.title,
+                    creatorName: schema.creatorName,
                     message: "successfuly commented",
                 };
             });
@@ -64,6 +65,7 @@ function updatethread(patch) {
                     creator: patch.creator,
                     forumId: patch.forumId,
                     text: patch.text,
+                    creatorName: patch.creatorName,
                 },
             }, { new: true });
             return result;

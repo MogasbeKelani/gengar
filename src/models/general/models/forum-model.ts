@@ -4,4 +4,5 @@ export interface discussion {
   topics?: [String];
   _id?: String;
   creator: String;
+  creatorName?: String;
 }

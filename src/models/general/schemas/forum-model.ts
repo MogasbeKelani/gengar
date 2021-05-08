@@ -7,6 +7,7 @@ const Forum = new Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     topics: [{ type: String }],
+    creatorName: { type: String, ref: "user", required: true }, //userName
   },
   { timestamps: true }
 );

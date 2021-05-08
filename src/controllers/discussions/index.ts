@@ -20,6 +20,7 @@ export async function createDiscussion(
         title: schema.title,
         description: schema.description,
         topics: schema.topics,
+        creatorName: schema.creatorName,
       };
     });
 
@@ -133,6 +134,7 @@ export async function updateDiscussion(
           title: patch.title,
           description: patch.description,
           topics: patch.topics,
+          creatorName: patch.creatorName,
         },
       },
       { new: true }

@@ -18,6 +18,7 @@ export async function createPost(forum: post): Promise<post | any> {
         text: schema.text,
         time: schema.time,
         threadId: schema.threadId,
+        creatorName: schema.creatorName,
       };
     });
 
@@ -91,6 +92,7 @@ export async function updatePost(patch: post): Promise<post | any> {
       {
         $set: {
           text: patch.text,
+          creatorName: patch.creatorName,
         },
       },
       { new: true }

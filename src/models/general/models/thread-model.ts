@@ -3,4 +3,5 @@ export interface threads {
   creator: String;
   forumId: String;
   text: String;
+  creatorName?: String;
 }

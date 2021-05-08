@@ -7,5 +7,6 @@ const Post = new Schema({
     threadId: { type: String, ref: "thread", required: true },
     text: { type: String, required: true },
     time: { type: Date, default: Date.now },
+    creatorName: { type: String, ref: "user", required: true },
 }, { timestamps: true });
 module.exports = mongoose.model("post", Post);

@@ -28,6 +28,7 @@ function createDiscussion(forum) {
                     title: schema.title,
                     description: schema.description,
                     topics: schema.topics,
+                    creatorName: schema.creatorName,
                 };
             });
             return result;
@@ -133,6 +134,7 @@ function updateDiscussion(patch) {
                     title: patch.title,
                     description: patch.description,
                     topics: patch.topics,
+                    creatorName: patch.creatorName,
                 },
             }, { new: true });
             return result;
