@@ -47,17 +47,8 @@ export async function getByForumId(id: String): Promise<threads | any> {
 
 export async function getThreadByUserId(id: String): Promise<threads | any> {
   try {
-    const result = await client
-      .db("GitGud")
-      .collection("thread")
-<<<<<<< HEAD
-      .find({ creator: id })
-      .toArray();
+    const result = await client.db("GitGud").collection("thread");
 
-=======
-      .find({ creator: ObjectId(id) })
-      .toArray();
->>>>>>> 5df5fda9f75fd219991f6dbdaae8c4bce1553484
     return result;
   } catch (err) {
     throw err;
@@ -74,7 +65,6 @@ export async function deletethread(id: String): Promise<threads | any> {
     if (result.deletedCount == 0) {
       return { success: false };
     }
-
     return { success: true };
   } catch (err) {
     throw err;

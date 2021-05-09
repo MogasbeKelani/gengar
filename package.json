@@ -7,7 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
     "watch": "tsc -w",
-    "start": "concurrently \"npm run dev\" \" cd ../gitgudcoding && npm run client\""
+    "start": "node app.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install"
+  },
+  "engines": {
+    "node": "10.16.0"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +31,7 @@
     "jsdom": "^16.5.2",
     "mongoose": "^5.11.19",
     "node-fetch": "^2.6.1",
+    "npm": "^7.12.0",
     "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth20": "^2.0.0",

@@ -4,7 +4,7 @@ const cors = require("cors");
 const db = require("./db");
 const fs = require("fs");
 const yaml = require("js-yaml");
-const apiPort = 5000;
+const apiPort = process.env.PORT || 5000;
 const bodyParser = require("body-parser");
 // create application/json parser
 app.use(
@@ -35,6 +35,13 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.get("/check", (req, res) => {
+  try {
+    res.send({ message: "hi" });
+  } catch (err) {
+    throw err;
+  }
+});
 
 // Passport Middleware
 //IMPORTANT: When the server restart(this include being restart by nodemon) it will destory all the current session so be mindful of that
