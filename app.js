@@ -35,6 +35,13 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.get("/check", (req, res) => {
+  try {
+    res.send({ message: "hi" });
+  } catch (err) {
+    throw err;
+  }
+});
 
 // Passport Middleware
 //IMPORTANT: When the server restart(this include being restart by nodemon) it will destory all the current session so be mindful of that
