@@ -8,8 +8,7 @@
     "dev": "nodemon app.js",
     "watch": "tsc -w",
     "start": "node app.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build",
-    "build": "webpack"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install"
   },
   "engines": {
     "node": "10.16.0"
