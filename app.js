@@ -4,7 +4,7 @@ const cors = require("cors");
 const db = require("./db");
 const fs = require("fs");
 const yaml = require("js-yaml");
-const apiPort = 5000;
+const apiPort = process.env.PORT || 5000;
 const bodyParser = require("body-parser");
 // create application/json parser
 app.use(
