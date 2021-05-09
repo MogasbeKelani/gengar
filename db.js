@@ -14,6 +14,7 @@ const MongoClient = require("mongodb").MongoClient;
  */
 const uri = process.env.MONGO;
 
+
 const client = new MongoClient(uri);
 
 async function main(client) {
