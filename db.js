@@ -12,8 +12,7 @@ const MongoClient = require("mongodb").MongoClient;
  * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
  * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
  */
-const uri =
-  "mongodb+srv://calvinIsAG:02JPeKOT5dJGRQxR@clustergit.nzf4d.mongodb.net/GitGud?retryWrites=true&w=majority";
+const uri = process.env.MONGO;
 
 const client = new MongoClient(uri);
 
