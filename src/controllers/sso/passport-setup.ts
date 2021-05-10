@@ -42,8 +42,7 @@ module.exports = function (passport: any) {
               .db("GitGud")
               .collection("user")
               .insertOne(newUser);
-            console.log(user);
-            cb(null, user);
+            cb(null, user.ops[0]);
           }
         } catch (err) {
           console.error(err);
