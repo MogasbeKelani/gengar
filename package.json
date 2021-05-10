@@ -8,10 +8,10 @@
     "dev": "nodemon app.js",
     "watch": "tsc -w",
     "start": "node app.js",
-    "heroku-postbuild": "cd gitgudcoding && npm install && npm run build"
+    "heroku-postbuild": "cd gitgudcoding && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "engines": {
-    "node": "10.16.0"
+    "node": "8.9.2"
   },
   "keywords": [],
   "author": "",

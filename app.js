@@ -22,8 +22,8 @@ db.main(db.client);
 client = db.client;
 //SSO Configurations
 const passport = require("passport");
-require("./build/controllers/sso/passport-setup")(passport);
-const sso = require("./build/routes/google");
+require("./tbuild/controllers/sso/passport-setup")(passport);
+const sso = require("./tbuild/routes/google");
 const session = require("express-session");
 
 app.use(cors());
@@ -53,13 +53,13 @@ app.use(passport.session());
 
 // Endpoints and their Imports
 
-const utube = require("./build/routes/youtube");
-const leetcode = require("./build/routes/leetcode");
-const isAuth = require("./build/routes/isAuth");
-const discussion = require("./build/routes/discussions");
-const users = require("./build/routes/users");
-const threads = require("./build/routes/threads");
-const posts = require("./build/routes/posts");
+const utube = require("./tbuild/routes/youtube");
+const leetcode = require("./tbuild/routes/leetcode");
+const isAuth = require("./tbuild/routes/isAuth");
+const discussion = require("./tbuild/routes/discussions");
+const users = require("./tbuild/routes/users");
+const threads = require("./tbuild/routes/threads");
+const posts = require("./tbuild/routes/posts");
 
 app.use("/google", sso);
 app.use("/api/youtube", utube);
