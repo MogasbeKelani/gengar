@@ -21,7 +21,7 @@ function App() {
         <div className="auth-wrapper">
           <div className="auth-inner">
             <Switch>
-              <PrivateRoute path="/" component={Landing} />
+              <PrivateRoute exact path="/" component={Landing} />
               <Route path="/sign-in" component={Signin} />
               <Route path="/sign-up" component={SignUp} />
               <PrivateRoute path="/searchVid" component={SearchVid} />
