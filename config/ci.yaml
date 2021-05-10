@@ -3,7 +3,7 @@ utube:
 
 googleSSO:
   id: 416348247465-3lmacilgcghqqdcigu8qcqk803d7ept5.apps.googleusercontent.com
-  sercret: pv9X9SpkJpfX7p2e4Yp6Wdw5
+  secret: pv9X9SpkJpfX7p2e4Yp6Wdw5
 
 leetcode:
   endpoints:

@@ -3,6 +3,8 @@ const app = express();
 const cors = require("cors");
 const db = require("./db");
 const fs = require("fs");
+const path = require("path");
+
 const yaml = require("js-yaml");
 const apiPort = process.env.PORT || 5000;
 const bodyParser = require("body-parser");
@@ -35,6 +37,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+
 app.get("/check", (req, res) => {
   try {
     res.send({ message: "hi" });
@@ -66,6 +69,14 @@ app.use("/api/discussions", discussion);
 app.use("/api/users", users);
 app.use("/api/threads", threads);
 app.use("/api/posts", posts);
+
+// Have Node serve the files for our built React app
+app.use(express.static(path.resolve(__dirname, "./gitgudcoding/build")));
+
+// All other GET requests not handled before will return our React app
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./gitgudcoding/build", "index.html"));
+});
 
 app.listen(apiPort, function () {
   return console.log("Server running on port " + apiPort);
