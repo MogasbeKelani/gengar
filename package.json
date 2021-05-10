@@ -6,9 +6,9 @@
   "scripts": {
     "client": "cd gitgudcoding && npm start",
     "server": "cd gengar && npm start",
-    "build": "cd gitgudcoding && npm run build",
+    "build": "cd gitgudcoding && npm run build && cd ../gengar && npm install",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "start": "cd gengar && npm install && npm start",
+    "start": "cd gengar && npm start",
     "heroku-postbuild": "cd gitgudcoding && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "keywords": [],
