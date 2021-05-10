@@ -71,11 +71,11 @@ app.use("/api/threads", threads);
 app.use("/api/posts", posts);
 
 // Have Node serve the files for our built React app
-app.use(express.static(path.resolve(__dirname, "./gitgudcoding/build")));
+app.use(express.static(path.resolve("./gitgudcoding/build")));
 
 // All other GET requests not handled before will return our React app
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./gitgudcoding/build", "index.html"));
+  res.sendFile(path.resolve("./gitgudcoding/build", "index.html"));
 });
 
 app.listen(apiPort, function () {
