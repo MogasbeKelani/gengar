@@ -8,7 +8,7 @@
     "dev": "nodemon app.js",
     "watch": "tsc -w",
     "start": "node app.js",
-    "heroku-postbuild": "cd gitgudcoding && npm install --only=dev && npm install && npm run build"
+    "heroku-postbuild": "cd ./gitgudcoding && npm run build"
   },
   "engines": {
     "node": "10.16.0"
