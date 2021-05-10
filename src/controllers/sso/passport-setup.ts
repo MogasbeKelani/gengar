@@ -8,7 +8,8 @@ module.exports = function (passport: any) {
       {
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "/google/auth/callback",
+        callbackURL:
+          "https://peaceful-dusk-16502.herokuapp.com/google/auth/callback",
       },
       async function (
         accessToken: any,
