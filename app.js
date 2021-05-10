@@ -22,8 +22,8 @@ db.main(db.client);
 client = db.client;
 //SSO Configurations
 const passport = require("passport");
-require("./tbuild/controllers/sso/passport-setup")(passport);
-const sso = require("./tbuild/routes/google");
+require("./truth/controllers/sso/passport-setup")(passport);
+const sso = require("./truth/routes/google");
 const session = require("express-session");
 
 app.use(cors());
@@ -53,13 +53,13 @@ app.use(passport.session());
 
 // Endpoints and their Imports
 
-const utube = require("./tbuild/routes/youtube");
-const leetcode = require("./tbuild/routes/leetcode");
-const isAuth = require("./tbuild/routes/isAuth");
-const discussion = require("./tbuild/routes/discussions");
-const users = require("./tbuild/routes/users");
-const threads = require("./tbuild/routes/threads");
-const posts = require("./tbuild/routes/posts");
+const utube = require("./truth/routes/youtube");
+const leetcode = require("./truth/routes/leetcode");
+const isAuth = require("./truth/routes/isAuth");
+const discussion = require("./truth/routes/discussions");
+const users = require("./truth/routes/users");
+const threads = require("./truth/routes/threads");
+const posts = require("./truth/routes/posts");
 
 app.use("/google", sso);
 app.use("/api/youtube", utube);
@@ -71,11 +71,11 @@ app.use("/api/threads", threads);
 app.use("/api/posts", posts);
 
 // Have Node serve the files for our built React app
-app.use(express.static(path.resolve("./gitgudcoding/build")));
+app.use(express.static(path.resolve("./client/build")));
 
 // All other GET requests not handled before will return our React app
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve("./gitgudcoding", "build", "index.html"));
+  res.sendFile(path.resolve("./client/build", "index.html"));
 });
 
 app.listen(apiPort, function () {

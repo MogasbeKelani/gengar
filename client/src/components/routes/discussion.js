@@ -4,7 +4,7 @@ import axios from "axios";
 import DiscussionList from "../app/posts/discussionList";
 import moment from "moment";
 import { getDiscussionsByTitle } from "../../resolvers";
-import image from "../../../src/resources/monke.jpeg";
+import image from "../../resources/monke.jpeg";
 
 class discussion extends Component {
   state = {
