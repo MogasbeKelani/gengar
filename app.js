@@ -22,8 +22,8 @@ db.main(db.client);
 client = db.client;
 //SSO Configurations
 const passport = require("passport");
-require("./truth/controllers/sso/passport-setup")(passport);
-const sso = require("./truth/routes/google");
+require("./build/controllers/sso/passport-setup")(passport);
+const sso = require("./build/routes/google");
 const session = require("express-session");
 
 app.use(cors());
@@ -53,13 +53,13 @@ app.use(passport.session());
 
 // Endpoints and their Imports
 
-const utube = require("./truth/routes/youtube");
-const leetcode = require("./truth/routes/leetcode");
-const isAuth = require("./truth/routes/isAuth");
-const discussion = require("./truth/routes/discussions");
-const users = require("./truth/routes/users");
-const threads = require("./truth/routes/threads");
-const posts = require("./truth/routes/posts");
+const utube = require("./build/routes/youtube");
+const leetcode = require("./build/routes/leetcode");
+const isAuth = require("./build/routes/isAuth");
+const discussion = require("./build/routes/discussions");
+const users = require("./build/routes/users");
+const threads = require("./build/routes/threads");
+const posts = require("./build/routes/posts");
 
 app.use("/google", sso);
 app.use("/api/youtube", utube);

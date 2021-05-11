@@ -15,7 +15,7 @@ module.exports = function (passport) {
     passport.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "https://peaceful-dusk-16502.herokuapp.com/google/auth/callback",
+        callbackURL: "/google/auth/callback",
     }, function (accessToken, refreshToken, profile, cb) {
         return __awaiter(this, void 0, void 0, function* () {
             //cb is callback
@@ -26,23 +26,23 @@ module.exports = function (passport) {
                 image: profile.photos[0].value,
                 create_date: Date.now(),
                 update_date: Date.now(),
+                creator: profile.name.givenName,
             };
             try {
                 let user = yield client
                     .db("GitGud")
                     .collection("user")
                     .findOne({ google_id: profile.id });
-                console.log(user);
                 //user exist in the db
-                if (user) {
-                    cb(null, user);
+                if (user.ops && user.ops[0]._id) {
+                    cb(null, user.ops[0]);
                 }
                 else {
                     user = yield client
                         .db("GitGud")
                         .collection("user")
                         .insertOne(newUser);
-                    console.log(user.ops[0]);
+                    console.log("\n\n\n\n\n\n\n\n", user.ops[0]);
                     cb(null, user.ops[0]);
                 }
             }

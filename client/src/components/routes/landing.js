@@ -65,8 +65,7 @@ class landing extends Component {
             <img src="https://emoji.gg/assets/emoji/3600_kermit_sips_tea.gif"></img>
             {
               <h4 style={{ paddingTop: "20px" }}>
-                You have no posts or discussions but heres some reccomended
-                videos
+                You have no posts or discussions but heres some suggested videos
               </h4>
             }{" "}
           </div>
@@ -81,11 +80,7 @@ class landing extends Component {
       );
     }
   }
-  isNotEmpty() {
-    if (this.state.result !== 0) {
-      return <VideoList result={this.state.video}></VideoList>;
-    }
-  }
+
   render() {
     return (
       <div>
@@ -96,10 +91,6 @@ class landing extends Component {
             <DiscussionList result={this.state.result}></DiscussionList>
           </div>
         </div>
-        <div style={{ textAlign: "center" }}>
-          {<h4 style={{ paddingTop: "20px" }}>Suggested videos</h4>}{" "}
-        </div>
-        <div>{this.isNotEmpty()}</div>
       </div>
     );
   }
