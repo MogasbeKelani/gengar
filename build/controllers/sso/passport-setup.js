@@ -34,7 +34,7 @@ module.exports = function (passport) {
                     .collection("user")
                     .findOne({ google_id: profile.id });
                 //user exist in the db
-                if (user.ops && user.ops[0]._id) {
+                if (user && user.ops && user.ops[0]._id) {
                     cb(null, user.ops[0]);
                 }
                 else {
