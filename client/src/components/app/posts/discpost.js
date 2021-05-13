@@ -38,7 +38,7 @@ class DiscPost extends Component {
               </div>
               <div class="float-right">
                 <p class="text-muted">
-                  <a href="#">{this.props.creator}</a> {"posted "}
+                  <a>{this.props.creator}</a> {"posted "}
                   <span class="text-secondary font-weight-bold">
                     {this.props.createdAt}
                   </span>

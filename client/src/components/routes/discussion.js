@@ -116,31 +116,6 @@ class discussion extends Component {
             <DiscussionList result={this.state.result}></DiscussionList>
             {this.emptyArray()}
           </div>
-          <ul class="pagination pagination-sm pagination-circle justify-content-center mb-0">
-            <li class="page-item disabled">
-              <span class="page-link has-icon">
-                <i class="material-icons">prev</i>
-              </span>
-            </li>
-            <li class="page-item active">
-              <span class="page-link">1</span>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
-                2
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
-                3
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link has-icon" href="#">
-                <i class="material-icons">next</i>
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
     );

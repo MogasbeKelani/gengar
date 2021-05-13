@@ -1,9 +1,11 @@
+/* eslint-disable no-restricted-globals */
 import React, { Component } from "react";
 import NavBar from "../app/admin/navbar";
 import "../../styles/createPost.scss";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { getUserFullInfo } from "../../resolvers";
+import { Redirect } from "react-router-dom";
 
 class createPostWithVideo extends Component {
   state = {
@@ -12,6 +14,7 @@ class createPostWithVideo extends Component {
     description: "",
     descriptionCharLimit: 500,
     username: [],
+    created: false,
   };
 
   constructor(props) {
@@ -37,6 +40,7 @@ class createPostWithVideo extends Component {
   handleOnSubmit = async (e) => {
     e.preventDefault();
     await this.getName();
+    var self = this;
 
     if (this.state.title.length > this.state.titleCharLimit) {
       Swal.fire({ icon: "error", text: "Title character Limit Exceeded" });
@@ -66,7 +70,8 @@ class createPostWithVideo extends Component {
         },
       }).then(
         (response) => {
-          console.log(response);
+          console.log("hi", response);
+          window.location.href = "/discussion";
         },
         (error) => {
           console.log(error);

@@ -4,6 +4,7 @@ import "../../styles/createPost.scss";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { getUserFullInfo } from "../../resolvers";
+import { Redirect } from "react-router-dom";
 
 class createPost extends Component {
   state = {
@@ -12,6 +13,7 @@ class createPost extends Component {
     description: "",
     descriptionCharLimit: 500,
     username: [],
+    created: false,
   };
 
   constructor(props) {
@@ -36,6 +38,7 @@ class createPost extends Component {
 
   handleOnSubmit = async (e) => {
     e.preventDefault();
+    var self = this;
     await this.getName();
 
     if (this.state.title.length > this.state.titleCharLimit) {
@@ -67,6 +70,7 @@ class createPost extends Component {
       }).then(
         (response) => {
           console.log(response);
+          window.location.href = "/discussion";
         },
         (error) => {
           console.log(error + "this is an error");
@@ -79,6 +83,16 @@ class createPost extends Component {
   };
 
   render() {
+    var created = false;
+    if (this.created) {
+      created = (
+        <Redirect
+          to={{
+            pathname: "/sign-in",
+          }}
+        />
+      );
+    }
     return (
       <div>
         <NavBar />
