@@ -1,0 +1,12 @@
+{
+    "baseUrl": "http://localhost:5000/",
+    "env": {
+        "googleSocialLoginUsername": "mingkim0210@gmail.com",
+        "googleSocialLoginPassword": "qkfkadmlA1!.",
+        "loginUrl": "http://localhost:5000/sign-in",
+        "cookieName": "google-sso-login-cookie",
+        "googleClientId": "245860990499-d67f3a81s52s1tjfreb16g1h5jsp5rv6.apps.googleusercontent.com",
+        "googleClientSecret": "pKkdlayvmnNN7NS_yJn_uolj",
+        "googleRefreshToken": "1//04DwjrfzYOabcCgYIARAAGAQSNwF-L9Ire2zen07PPcjKrZ2-1LoVPuCSiF6ZwIl35QTunD2HvRxVtCHNFNjSv1XxI1mHXy6ty50"
+    }
+}
