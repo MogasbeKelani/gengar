@@ -1,13 +1,5 @@
 # Gengar
-GitGud Codings Back-End
-
-## GitGud Coding Project Set up 
-
-/gitgudpg - main folder
-
-  /gengar (back-end)
-  
-  /gitgudcoding (front-end)
+GitGud Codings SIbiling Repository 
 
 
 # Getting Set up 
@@ -33,19 +25,26 @@ In Terminal copy and run
 Pls check here https://nodejs.org/en/download/
 
 ## Starting app 
-To Build Gengar only run 
+### Method 1
 
-> npm run dev
+> npm run dev 
 
-To Build the whole app run 
+### Method 2 
+
+> npm run dev 
+
+> cd client 
 
 > npm run start
-> 
+
+Method 1 the app & apis will be available using localhost:5000
+
+Method 2 the app will still be available on localhost:5000 but front-end changes will be on localhost:3000. Proxy is handled, once ready to push run this command in client 
+
+> npm run build 
 
 
-## Structure and Rules 
 
-Will Update soon
 
 
 
